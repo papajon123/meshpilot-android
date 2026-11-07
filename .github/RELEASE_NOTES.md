@@ -1,8 +1,10 @@
-## MeshPilot 0.12.3
+## MeshPilot 0.12.4
 
 MeshPilot is an independent client for MeshCentral servers, not affiliated with or endorsed by the MeshCentral project.
 
-**Why update:** the GitHub repository will soon be renamed from `meshcentral-android` to `meshpilot` to match the app's name. This version keeps the in-app update check working before and after the rename, whichever of the candidate names is used. 0.12.2 does not recognise the final name; older versions will stop seeing new releases once the repository is renamed, so install this one to keep update notifications. Old GitHub links will keep redirecting. Nothing else changes in the app.
+**Fixed:** when the user of the computer rejects the permission prompt for a terminal or file session (or the prompt times out), the session now closes by itself and the reason is shown. Before, the refused session stayed in the Sessions list and blocked one of the two session slots until it was closed by hand (issue #18).
+
+**Update check:** the in-app update check keeps working before and after the GitHub repository is renamed. Versions older than 0.12.3 will stop seeing new releases after the rename, so install this one to keep update notifications.
 
 ### Included from 0.12.0
 

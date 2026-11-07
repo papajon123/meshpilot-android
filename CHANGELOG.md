@@ -1,3 +1,10 @@
+# 0.12.4 — 2026-11-07
+
+- A terminal or file session that the computer refuses (its user rejects the permission prompt, the prompt times out,
+  or the agent cannot start the session) is closed automatically with the reason shown. Before, the dead session stayed
+  in the Sessions list and kept one of the two session slots, so the next terminal or file session could not open
+  until it was closed by hand (GitHub issue 18). Other failures still keep the session for an explicit reconnect.
+
 # 0.12.3 — 2026-11-06
 
 - The repository will be renamed to `papajon123/meshpilot`. The update check accepts release assets from

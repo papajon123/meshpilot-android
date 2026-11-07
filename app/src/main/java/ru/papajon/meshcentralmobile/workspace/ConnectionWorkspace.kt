@@ -16,7 +16,9 @@ import kotlinx.coroutines.withTimeout
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.takeWhile
 import org.json.JSONObject
 import ru.papajon.meshcentralmobile.R
@@ -359,6 +361,7 @@ class ConnectionWorkspace private constructor(private val application: Applicati
         if (tab.protocol != null) {
             if (!state.devicesCurrent || !device.sessionAvailability(tab.protocol, state.serverCapabilities).canAttempt) return false
             val id = "${device.nodeId}|${tab.name}"
+            val existed = registry.get(id) != null
             val session = registry.admit(id) {
                 // Capture additional consent in the session factory so reconnect cannot silently
                 // drop it when a setting is changed while this session is open.
@@ -383,6 +386,7 @@ class ConnectionWorkspace private constructor(private val application: Applicati
             }
             if (session == null) { message = UiText.resource(R.string.workspace_capacity); return false }
             sessions = registry.values()
+            if (!existed) watchRefusal(session)
         }
         deviceTab = tab
         lastTabs[device.nodeId] = tab
@@ -438,7 +442,35 @@ class ConnectionWorkspace private constructor(private val application: Applicati
         return selectTab(DeviceTab.Terminal)
     }
     fun browseDevices() { selectedDeviceId = null; deviceTab = DeviceTab.Overview; client.setRemotePaused(true) }
+    private val refusalWatchers = mutableMapOf<String, Job>()
+
+    /**
+     * A terminal or file session that the computer refused (permission denied, prompt timed out,
+     * agent could not start it) cannot recover. Close it so it stops holding one of the two
+     * session slots, and tell the user why. Other failures keep the session for an explicit reconnect.
+     */
+    private fun watchRefusal(session: OpenSession) {
+        val statuses: Flow<ru.papajon.meshcentralmobile.localization.UiText?> = when {
+            session.terminal != null -> session.terminal.state.map {
+                if (it.phase == ru.papajon.meshcentralmobile.mesh.session.RelayPhase.Failed) it.message else null
+            }
+            session.files != null -> session.files.state.map { if (!it.connected && !it.busy) it.message else null }
+            else -> return
+        }
+        refusalWatchers.remove(session.id)?.cancel()
+        refusalWatchers[session.id] = scope.launch {
+            val reason = statuses.first { ConsentRefusal.matches(it) }
+            // Drop our own entry first: closeSession cancels the watcher registered for the id.
+            refusalWatchers.remove(session.id)
+            if (registry.get(session.id) === session) {
+                closeSession(session.id)
+                message = reason
+            }
+        }
+    }
+
     fun closeSession(id: String) {
+        refusalWatchers.remove(id)?.cancel()
         val old = registry.get(id)
         if (old?.files != null && transfers.target?.controller === old.files) transfers.cancelAll()
         registry.close(id)
@@ -457,6 +489,8 @@ class ConnectionWorkspace private constructor(private val application: Applicati
         sharedFiles = emptyList()
         inspectors.values.forEach { it.close() }; inspectors.clear()
         companions.values.forEach { it.close() }; companions.clear()
+        refusalWatchers.values.forEach { it.cancel() }
+        refusalWatchers.clear()
         registry.closeAll()
         sessions = emptyList()
         unreadChats = 0
