@@ -1,8 +1,8 @@
-## MeshPilot 0.12.5
+## MeshPilot 0.12.6
 
 MeshPilot is an independent client for MeshCentral servers, not affiliated with or endorsed by the MeshCentral project.
 
-**Fixed:** computers whose Mesh Agent reports no desktop support (for example Ubuntu Server without a graphical session) no longer show the Desktop tab or a Connect button that could only fail. The list explains why instead; Terminal and Files stay available.
+**Fixed:** a computer whose Mesh Agent reports no desktop (for example Ubuntu Server without a graphical session) no longer shows a Desktop tab at all; Terminal and Files stay available and the overview explains why. The agent version is shown again for current agents (their core build date) instead of "Not specified".
 
 **Update check:** the in-app update check keeps working before and after the GitHub repository is renamed. Versions older than 0.12.3 will stop seeing new releases after the rename, so install this one to keep update notifications.
 

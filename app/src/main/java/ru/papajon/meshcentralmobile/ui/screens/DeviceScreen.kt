@@ -95,6 +95,9 @@ fun DeviceScreen(
     var toolsMenuExpanded by remember { mutableStateOf(false) }
     val tabs = DeviceTab.entries.filter { taskToolsSupported || it !in setOf(DeviceTab.Processes, DeviceTab.Services) }.filter { it != DeviceTab.Chat ||
         ru.papajon.meshcentralmobile.mesh.chat.ChatProtocol.allowed(device, current) || hasChat || selected == DeviceTab.Chat }
+        // An agent without a display (headless Linux) never offers a desktop, so the tab is not shown at all, as in
+        // the MeshCentral web UI; the overview card still explains why.
+        .filter { it != DeviceTab.Desktop || !device.reportsNoDisplay || selected == DeviceTab.Desktop }
     fun available(tab: DeviceTab): Boolean = when (tab) {
         DeviceTab.Processes, DeviceTab.Services -> taskToolsSupported
         DeviceTab.Overview -> true
@@ -179,7 +182,7 @@ fun DeviceScreen(
         ) {
             tabs.forEach { tab ->
                 Tab(
-                    modifier = Modifier.padding(horizontal = 8.dp),
+                    modifier = Modifier.padding(horizontal = 8.dp).testTag("device-tab-${tab.name}"),
                     selected = selected == tab,
                     onClick = { onSelect(tab) },
                     enabled = available(tab),
@@ -333,7 +336,7 @@ private fun DeviceMetadata(device: MeshDevice) {
                         )
                         DeviceValue(
                             label = R.string.device_agent_version,
-                            value = device.agentVersion?.takeUnless { it == "0" }.orEmpty(),
+                            value = device.agentVersionLabel,
                             modifier = Modifier.weight(1f),
                             leftToRight = true,
                         )
@@ -350,7 +353,7 @@ private fun DeviceMetadata(device: MeshDevice) {
                     )
                     DeviceValue(
                         label = R.string.device_agent_version,
-                        value = device.agentVersion?.takeUnless { it == "0" }.orEmpty(),
+                        value = device.agentVersionLabel,
                         leftToRight = true,
                     )
                 }

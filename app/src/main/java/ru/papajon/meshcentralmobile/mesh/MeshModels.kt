@@ -75,6 +75,8 @@ data class MeshDevice(
     val mtype: Int = 0,
     val agentId: Int? = null,
     val agentVersion: String? = null,
+    /** `agent.core`: the meshcore build the agent runs; the web UI's Agent Version column shows it. */
+    val agentCore: String? = null,
     val agentCaps: Int? = null,
     /** Resolved from the mesh `links` for the signed-in user; null when the server did not send links. */
     val rights: Int? = null,
@@ -104,6 +106,10 @@ data class MeshDevice(
     val online: Boolean get() = conn > 0
 
     val isMeshAgent: Boolean get() = agentId != null
+
+    /** Current agents report `ver` 0 and identify their build through `core`, as the MeshCentral web UI shows it. */
+    val agentVersionLabel: String
+        get() = agentVersion?.takeUnless { it == "0" } ?: agentCore.orEmpty()
 
     val isAndroidAgent: Boolean get() = agentId == 14
 
@@ -156,6 +162,10 @@ data class MeshDevice(
             !agentReportsDesktop -> DesktopCapability.UnsupportedNoDisplay
             else -> DesktopCapability.MeshAgentDesktop
         }
+
+    /** The agent itself says it has no desktop; unlike offline or rights, this does not change during a visit. */
+    val reportsNoDisplay: Boolean
+        get() = isMeshAgent && !agentReportsDesktop
 
     val canOpenNativeDesktop: Boolean
         get() = desktopCapability == DesktopCapability.MeshAgentDesktop

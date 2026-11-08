@@ -256,6 +256,7 @@ object MeshControlParser {
             mtype = item.optInt("mtype", 0),
             agentId = agent?.optIntOrNull("id"),
             agentVersion = agent?.optText("ver")?.takeIf { it.isNotBlank() },
+            agentCore = agent?.optText("core")?.trim()?.takeIf { it.isNotEmpty() }?.take(128),
             agentCaps = agent?.optIntOrNull("caps"),
             host = item.optText("host").takeIf { it.isNotBlank() },
             sshPort = item.optIntOrNull("sshport")?.takeIf { it in 1..65535 },

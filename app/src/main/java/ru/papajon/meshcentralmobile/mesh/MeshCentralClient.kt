@@ -1617,6 +1617,7 @@ class MeshCentralClient(
             mtype = if (incoming.mtype != 0) incoming.mtype else existing.mtype,
             agentId = incoming.agentId ?: existing.agentId,
             agentVersion = incoming.agentVersion ?: existing.agentVersion,
+            agentCore = incoming.agentCore ?: existing.agentCore,
             agentCaps = incoming.agentCaps ?: existing.agentCaps,
             rights = incoming.rights ?: existing.rights,
             host = incoming.host ?: existing.host,

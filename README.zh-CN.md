@@ -54,6 +54,7 @@ MeshCentral 网页面板可以在手机浏览器中打开，但它是为大屏�
 
 这是一个处于公开预览阶段的小型独立项目。目前最有帮助的是：
 
+- **加入 Google Play 测试。** Google 要求 12 名测试者连续 14 天保留安装后应用才能公开发布；[加入方法](docs/PLAY_TESTING.md)只需两分钟，不需要服务器。
 - **在你的手机上试用**，并提交[设备报告](https://github.com/papajon123/meshcentral-android/issues/new?template=device_report.yml)：哪些功能可用，哪些不可用。特别欢迎真实手机和 Windows 代理的反馈。
 - **提问和分享想法**：请到 [Discussions](https://github.com/papajon123/meshcentral-android/discussions)。
 - **报告错误**：使用[错误报告表单](https://github.com/papajon123/meshcentral-android/issues/new?template=bug_report.yml)。请勿公开服务器地址、凭据或私人设备数据。

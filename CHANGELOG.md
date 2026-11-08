@@ -1,3 +1,11 @@
+# 0.12.6 — 2026-11-08
+
+- A computer whose Mesh Agent reports no desktop (for example Ubuntu Server without a graphical session) no longer
+  shows a Desktop tab at all, as in the MeshCentral web interface; in 0.12.5 the tab stayed visible but could not be
+  opened. The overview still explains why the desktop is unavailable.
+- Agent version is shown again for current agents. They report version 0 and identify their build through the core
+  date, which the app now shows like the MeshCentral web interface does, instead of "Not specified".
+
 # 0.12.5 — 2026-11-08
 
 - A computer whose Mesh Agent reports no desktop support (for example Ubuntu Server or another Linux machine without

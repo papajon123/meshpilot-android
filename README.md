@@ -84,6 +84,7 @@ The MeshCentral web panel opens in a mobile browser, but it is designed for a de
 
 This is a small independent project in public preview. The most useful help right now:
 
+- **Join the Google Play test.** Google needs 12 testers who keep the app installed for 14 days before it can go public; [how to join](docs/PLAY_TESTING.md) takes two minutes and needs no server.
 - **Try it on your phone** and leave a [device report](https://github.com/papajon123/meshcentral-android/issues/new?template=device_report.yml): what works and what does not. Real phones and Windows agents are especially welcome.
 - **Ask questions and share ideas** in [Discussions](https://github.com/papajon123/meshcentral-android/discussions).
 - **Report bugs** with the [bug report form](https://github.com/papajon123/meshcentral-android/issues/new?template=bug_report.yml). Never post server addresses, credentials or private device data.
