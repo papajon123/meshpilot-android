@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="devices_capability_no_display">لا يوجد سطح مكتب</string>
+    <string name="devices_capability_reason_no_display">لا توجد جلسة سطح مكتب رسومية على هذا الكمبيوتر (يفيد Mesh Agent بعدم دعم سطح المكتب البعيد)</string>
+</resources>

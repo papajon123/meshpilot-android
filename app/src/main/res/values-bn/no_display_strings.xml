@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="devices_capability_no_display">ডেস্কটপ নেই</string>
+    <string name="devices_capability_reason_no_display">এই কম্পিউটারে গ্রাফিক্যাল ডেস্কটপ সেশন নেই (Mesh Agent জানাচ্ছে রিমোট ডেস্কটপ সমর্থিত নয়)</string>
+</resources>

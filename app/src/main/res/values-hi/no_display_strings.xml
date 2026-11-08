@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="devices_capability_no_display">डेस्कटॉप नहीं</string>
+    <string name="devices_capability_reason_no_display">इस कंप्यूटर पर ग्राफ़िकल डेस्कटॉप सेशन नहीं है (Mesh Agent बताता है कि रिमोट डेस्कटॉप समर्थित नहीं है)</string>
+</resources>

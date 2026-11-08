@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="devices_capability_no_display">No desktop</string>
+    <string name="devices_capability_reason_no_display">this computer has no graphical desktop session (the Mesh Agent reports no remote desktop support)</string>
+</resources>

@@ -51,6 +51,7 @@ fun desktopCapabilityShortLabel(capability: DesktopCapability): String = when (c
     DesktopCapability.UnsupportedOffline -> stringResource(R.string.devices_capability_offline)
     DesktopCapability.UnsupportedNonMeshAgent -> stringResource(R.string.devices_capability_no_agent)
     DesktopCapability.UnsupportedNoPermission -> stringResource(R.string.devices_capability_no_rights)
+    DesktopCapability.UnsupportedNoDisplay -> stringResource(R.string.devices_capability_no_display)
 }
 
 /** Words that finish the sentence "Connection unavailable: …". */
@@ -60,6 +61,7 @@ fun desktopCapabilityReason(capability: DesktopCapability): String = when (capab
     DesktopCapability.UnsupportedOffline -> stringResource(R.string.devices_capability_reason_offline)
     DesktopCapability.UnsupportedNonMeshAgent -> stringResource(R.string.devices_capability_reason_non_agent)
     DesktopCapability.UnsupportedNoPermission -> stringResource(R.string.devices_capability_reason_no_permission)
+    DesktopCapability.UnsupportedNoDisplay -> stringResource(R.string.devices_capability_reason_no_display)
 }
 
 /** Navigation bar title, also used as the content description of its icon. */

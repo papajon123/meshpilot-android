@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="devices_capability_no_display">Tanpa desktop</string>
+    <string name="devices_capability_reason_no_display">komputer ini tidak memiliki sesi desktop grafis (Mesh Agent melaporkan tidak mendukung desktop jarak jauh)</string>
+</resources>

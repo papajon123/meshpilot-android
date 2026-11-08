@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="devices_capability_no_display">ڈیسک ٹاپ نہیں</string>
+    <string name="devices_capability_reason_no_display">اس کمپیوٹر پر گرافیکل ڈیسک ٹاپ سیشن نہیں ہے (Mesh Agent بتاتا ہے کہ ریموٹ ڈیسک ٹاپ سپورٹ نہیں ہے)</string>
+</resources>

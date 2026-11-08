@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="devices_capability_no_display">데스크톱 없음</string>
+    <string name="devices_capability_reason_no_display">이 컴퓨터에는 그래픽 데스크톱 세션이 없습니다(Mesh Agent가 원격 데스크톱을 지원하지 않는다고 보고함)</string>
+</resources>

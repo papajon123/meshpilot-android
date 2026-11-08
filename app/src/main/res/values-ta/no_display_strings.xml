@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="devices_capability_no_display">டெஸ்க்டாப் இல்லை</string>
+    <string name="devices_capability_reason_no_display">இந்த கணினியில் வரைகலை டெஸ்க்டாப் அமர்வு இல்லை (Mesh Agent தொலை டெஸ்க்டாப் ஆதரவு இல்லை என தெரிவிக்கிறது)</string>
+</resources>

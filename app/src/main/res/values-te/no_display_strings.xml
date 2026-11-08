@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="devices_capability_no_display">డెస్క్‌టాప్ లేదు</string>
+    <string name="devices_capability_reason_no_display">ఈ కంప్యూటర్‌లో గ్రాఫికల్ డెస్క్‌టాప్ సెషన్ లేదు (Mesh Agent రిమోట్ డెస్క్‌టాప్‌కు మద్దతు లేదని నివేదిస్తోంది)</string>
+</resources>

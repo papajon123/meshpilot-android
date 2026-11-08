@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="devices_capability_no_display">ไม่มีเดสก์ท็อป</string>
+    <string name="devices_capability_reason_no_display">คอมพิวเตอร์เครื่องนี้ไม่มีเซสชันเดสก์ท็อปแบบกราฟิก (Mesh Agent แจ้งว่าไม่รองรับเดสก์ท็อประยะไกล)</string>
+</resources>

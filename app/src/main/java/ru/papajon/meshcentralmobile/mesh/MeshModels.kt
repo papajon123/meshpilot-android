@@ -141,11 +141,19 @@ data class MeshDevice(
             return (value and MeshRights.REMOTE_CONTROL) != 0 || (value and MeshRights.REMOTE_VIEW) != 0
         }
 
+    /**
+     * Agent capability bit 1 is Desktop; the MeshCentral web UI hides the Desktop tab without it. A headless Linux
+     * agent without a display server reports caps without that bit. Unknown caps and the Android agent still get an attempt.
+     */
+    private val agentReportsDesktop: Boolean
+        get() = isAndroidAgent || agentCaps == null || (agentCaps and AGENT_CAP_DESKTOP) != 0
+
     val desktopCapability: DesktopCapability
         get() = when {
             !online -> DesktopCapability.UnsupportedOffline
             !isMeshAgent -> DesktopCapability.UnsupportedNonMeshAgent
             !hasDesktopPermission -> DesktopCapability.UnsupportedNoPermission
+            !agentReportsDesktop -> DesktopCapability.UnsupportedNoDisplay
             else -> DesktopCapability.MeshAgentDesktop
         }
 
@@ -173,11 +181,14 @@ enum class DeviceStatus(@StringRes private val labelRes: Int) {
         get() = UiText.Resource(labelRes)
 }
 
+private const val AGENT_CAP_DESKTOP = 1
+
 enum class DesktopCapability(@StringRes private val labelRes: Int) {
     MeshAgentDesktop(R.string.runtime_capability_mesh_agent),
     UnsupportedOffline(R.string.common_status_offline),
     UnsupportedNonMeshAgent(R.string.runtime_capability_not_agent),
-    UnsupportedNoPermission(R.string.runtime_capability_no_permission);
+    UnsupportedNoPermission(R.string.runtime_capability_no_permission),
+    UnsupportedNoDisplay(R.string.devices_capability_reason_no_display);
 
     val label: UiText
         get() = UiText.Resource(labelRes)

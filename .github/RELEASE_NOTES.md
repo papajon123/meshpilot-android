@@ -1,8 +1,8 @@
-## MeshPilot 0.12.4
+## MeshPilot 0.12.5
 
 MeshPilot is an independent client for MeshCentral servers, not affiliated with or endorsed by the MeshCentral project.
 
-**Fixed:** when the user of the computer rejects the permission prompt for a terminal or file session (or the prompt times out), the session now closes by itself and the reason is shown. Before, the refused session stayed in the Sessions list and blocked one of the two session slots until it was closed by hand (issue #18).
+**Fixed:** computers whose Mesh Agent reports no desktop support (for example Ubuntu Server without a graphical session) no longer show the Desktop tab or a Connect button that could only fail. The list explains why instead; Terminal and Files stay available.
 
 **Update check:** the in-app update check keeps working before and after the GitHub repository is renamed. Versions older than 0.12.3 will stop seeing new releases after the rename, so install this one to keep update notifications.
 

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="devices_capability_no_display">無桌面</string>
+    <string name="devices_capability_reason_no_display">此電腦沒有圖形桌面工作階段（Mesh Agent 回報不支援遠端桌面）</string>
+</resources>

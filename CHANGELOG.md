@@ -1,3 +1,10 @@
+# 0.12.5 — 2026-11-08
+
+- A computer whose Mesh Agent reports no desktop support (for example Ubuntu Server or another Linux machine without
+  a graphical session) no longer shows the Desktop tab or a Connect button that could only fail. The computers list
+  now says why instead, matching the MeshCentral web interface. Terminal and files stay available. When the agent
+  does not report its capabilities, the connection is still attempted as before.
+
 # 0.12.4 — 2026-11-07
 
 - A terminal or file session that the computer refuses (its user rejects the permission prompt, the prompt times out,

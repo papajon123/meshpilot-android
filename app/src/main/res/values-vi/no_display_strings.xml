@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="devices_capability_no_display">Không có màn hình nền</string>
+    <string name="devices_capability_reason_no_display">máy tính này không có phiên máy tính để bàn đồ họa (Mesh Agent báo không hỗ trợ máy tính để bàn từ xa)</string>
+</resources>
