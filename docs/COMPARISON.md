@@ -1,43 +1,43 @@
 # MeshCentral on Android: comparison
 
-As of **2026-11-06**. Our column describes **MeshPilot 0.10.6 (code 40)**.
+As of **2026-11-09**. Our column describes **MeshPilot 0.12.6 (code 48)**.
 Competitor columns describe the linked public sources checked on that date, not hands-on tests.
 **Not stated** means not found in those descriptions; it does not mean absent.
 **Partial** identifies a concrete capability or acceptance limit, not a claim of complete parity.
 A client manages other devices from a phone; an agent makes that phone a managed device.
 
-| Capability | MeshPilot 0.10.6 | PocketMesh [P] | MeshControl Pro [M] | Official Android agent [A] |
+| Capability | MeshPilot 0.12.6 | PocketMesh [P] | MeshControl Pro 1.4.5 [M] | Official Android agent [A] |
 |---|---|---|---|---|
-| Role, source and price | Independent client; Apache 2.0; free, no ads/analytics [1] | Client; closed source; currently free | Client; proprietary distribution; 15-day trial, then advertised €4.89/month or €48.99/year | Agent, not a control client; Apache 2.0 |
-| Distribution and updates | GitHub APKs; opt-in daily/manual checks, browser download, no automatic installation [2] | GitHub APK; checks every 12 hours | Google Play | Google Play or GitHub APK/AAB |
-| 2FA / remember device | TOTP and one-time codes requested from the server by e-mail, SMS or push; optional server-issued cookie encrypted with Keystore and scoped to account/endpoint/TLS trust. The app does not approve a push sign-in prompt as a separate method [3] | 2FA; login token; optional saved TOTP secret | TOTP | Approves/rejects push 2FA |
-| Self-signed/private-CA server | Explicit SHA-256 public-key approval and per-profile pinning in all builds; rejection stops requests [3] | Not stated | Self-signed support advertised | Agent pairing/trust model; not comparable to a client's sign-in |
-| Profiles, search and app lock | Up to 20 server profiles; favorites, recent devices, search; PIN/biometrics [4] | Multiple servers; biometric lock | Multiple servers, groups, search; fingerprint | Not a multi-server control client |
-| Computer desktop | Touch/trackpad, two-finger right click, clipboard text, monitors, fixed shortcuts and up to 12 saved combinations/profile [5] | Trackpad, gestures, key combinations, text | Gestures, special keys, saved combinations, rotation | Not a computer-control client |
+| Role, source and price | Independent client; Apache 2.0; free, no ads/analytics [1] | Client; closed source; currently free | Client; commercial (Nuraghia s.r.l.), no public source found; 15-day free trial, then advertised €1.49/month + VAT or €14.99/year | Agent, not a control client; Apache 2.0 |
+| Distribution and updates | GitHub APKs; opt-in daily/manual checks, browser download, no automatic installation [2] | GitHub APK; checks every 12 hours | Google Play; Android 12+ | Google Play or GitHub APK/AAB |
+| 2FA / remember device | TOTP and one-time codes requested from the server by e-mail, SMS or push; optional server-issued cookie encrypted with Keystore and scoped to account/endpoint/TLS trust. The app does not approve a push sign-in prompt as a separate method [3] | 2FA; login token; optional saved TOTP secret | TOTP; fingerprint sign-in without re-entering credentials | Approves/rejects push 2FA |
+| Self-signed/private-CA server | Explicit SHA-256 public-key approval and per-profile pinning in all builds; rejection stops requests [3] | Not stated | Self-signed certificates: shows the SHA-256 fingerprint and asks for explicit confirmation | Agent pairing/trust model; not comparable to a client's sign-in |
+| Profiles, search and app lock | Up to 20 server profiles; favorites, recent devices, search; group/OS/tag filters and CSV export of the shown list; PIN/biometrics [4] | Multiple servers; biometric lock | Multiple servers with quick switching; groups, filters and search; fingerprint | Not a multi-server control client |
+| Computer desktop | Touch/trackpad, two-finger right click, clipboard text, monitors, fixed shortcuts and up to 12 saved combinations/profile [5] | Trackpad, gestures, key combinations, text | Touch/trackpad modes, gestures, special keys, saved combinations, rotation, full screen; view-only mode; can lock the computer's input and screen | Not a computer-control client |
 | Desktop extras | Picture-in-picture viewing; physical mouse, keyboard and DeX-like input, with a remote keyboard-layout option [13] | Not stated | Not stated | Not a control client |
 | Stylus / S Pen | Pen as an absolute mouse in every pointer mode: hover moves the cursor without clicking, side-button right/middle clicks, eraser as the right button, palm rejection; precise tap/hold/swipe on phones with remote input. **Partial:** no pressure or tilt (not carried by the MeshCentral protocol); emulator-tested, physical S Pen acceptance pending [12] | Not stated | Not stated | Not a control client |
 | Phone screen and battery | Screen viewing after Android capture consent; battery and cached system/network details. Emulator/file evidence; broad physical-phone acceptance pending [6] | Phone-specific support not stated | Phone-specific support not stated | Shares screen after consent; reports battery/system/network |
 | Phone touch/navigation/text | **Requires modified input-capable agent**, enabled accessibility and sufficient rights; support is not yet upstream [6] | Not stated | Not stated | **View-only**; no touch, swipe or typing |
 | Phone actions | **Partial:** confirmed vibration/flashlight/message/link/dial requests with rights checks; sent does not mean executed, hardware effects remain unverified [6] | Not stated | Not stated | Notifications and limited console commands |
 | Phone files | **Partial:** categories/storage, verified upload/download and delete; no create/rename, ambiguous names restricted, isolated zero-byte-frame limitation [6] | Phone-specific support not stated | Phone-specific support not stated | Media/files accessible under Android permissions |
-| Computer-user consent | **Partial:** per-session consent request for desktop, terminal and files; server and agent automatic approval rules still apply [14] | Not stated | Not stated | Device-side capture consent only |
-| Terminal and SSH | Agent shell and SSH; up to 20 favorites/profile, inserted without Enter; separately reviewed commands with bounded output; explicit manual reconnect. Shell choice in the agent terminal: default, PowerShell and the signed-in user's variants (PowerShell on Windows only); Windows PowerShell 5+ UTF-8 is also an option of the separate Run command [7] | Agent terminal; SSH not yet | Shell and favorites; website advertises SSH, not independently verified | Limited console commands, not a general terminal client |
-| Computer files / SFTP | Browse/upload/download/create/rename/delete; SFTP relay; Linux live evidence [8] | File operations; SFTP not stated | File operations; SFTP not stated | Not a computer-file client |
+| Computer-user consent | **Partial:** per-session consent request for desktop, terminal and files; server and agent automatic approval rules still apply [14] | Not stated | Asks the desktop user for consent before connecting; guest links can require consent | Device-side capture consent only |
+| Terminal and SSH | Agent shell and SSH; up to 20 favorites/profile, inserted without Enter; separately reviewed commands with bounded output; explicit manual reconnect. Shell choice in the agent terminal: default, PowerShell and the signed-in user's variants (PowerShell on Windows only); Windows PowerShell 5+ UTF-8 is also an option of the separate Run command [7] | Agent terminal; SSH not yet | Agent shell, MeshCentral console and SSH (through the server with automatic login, or direct); favorites; reconnects without losing text | Limited console commands, not a general terminal client |
+| Computer files / SFTP | Browse/upload/download/create/rename/delete; SFTP relay; Linux live evidence [8] | File operations; SFTP not stated | Upload/download, rename, delete, create folders; SFTP not stated | Not a computer-file client |
 | Share / simultaneous sessions | Up to 20 shared documents with SHA-256 readback; two sessions (one desktop maximum), no input/command replay [8] | Not stated | Not stated | Not applicable |
-| Power, uninstall and removal | **Partial:** rights/confirmation-gated Wake/sleep/restart/shutdown/uninstall/remove; destructive execution not live-accepted, server ACK/disappearance is not proof [9] | Power actions, uninstall, removal | Not stated | Not a computer-management client |
+| Power, uninstall and removal | **Partial:** rights/confirmation-gated Wake/sleep/restart/shutdown/uninstall/remove; destructive execution not live-accepted, server ACK/disappearance is not proof [9] | Power actions, uninstall, removal | Wake-on-LAN, restart, shutdown and sleep with confirmation; uninstall/removal not stated | Not a computer-management client |
 | Port forwarding | **Partial:** TCP only over the `p=14` relay; 64 saved and 8 active rules, 16 connections; no UDP/VPN, five-minute idle stop [15] | Not stated | Not stated | Not applicable |
-| User messages / commands | **Partial:** preview/confirmation, permission checks, bounded output; delivery/execution and exit status are not inferred [7][9] | Notifications and shell commands | Website advertises interactive chat | Receives notifications/console commands |
-| Chat with the computer user | Text chat with the person at an online computer; 200 messages in session memory, 4096 UTF-16 limit, explicit close and retry, no disk history or file/audio/video transfer [16] | Not stated | Chat advertised | Not a chat client |
-| Hardware, software and metrics | Cached BIOS/board/TPM, online software, CPU/RAM, last boot/estimated uptime without plugin. **Partial:** agent-dependent/stale values, limited live platform coverage; localized BIOS dates, JSON null stays unknown [9] | Hardware/software/network details | Hardware and CPU/RAM/disk/uptime dashboards | Reports its own device/network/storage/battery |
+| User messages / commands | **Partial:** preview/confirmation, permission checks, bounded output; delivery/execution and exit status are not inferred [7][9] | Notifications and shell commands | Desktop notifications on the computer | Receives notifications/console commands |
+| Chat with the computer user | Text chat with the person at an online computer; 200 messages in session memory, 4096 UTF-16 limit, explicit close and retry, no disk history or file/audio/video transfer [16] | Not stated | Real-time chat for end-user support (off in guest mode) | Not a chat client |
+| Hardware, software and metrics | Cached BIOS/board/TPM, online software, CPU/RAM, last boot/estimated uptime without plugin. **Partial:** agent-dependent/stale values, limited live platform coverage; localized BIOS dates, JSON null stays unknown [9] | Hardware/software/network details | CPU/RAM/disk/uptime and connected devices; disk volumes; software inventory not stated | Reports its own device/network/storage/battery |
 | Windows security | Reported Security Center/antivirus and Needs attention filter. **Partial:** unknown stays unknown; not an independent security scan [9] | Not stated | Antivirus, firewall and update dashboards | Not applicable |
-| Events / power history | Up to 50 events, 100 recent transitions, seven-day chart; missing periods stay unknown [9] | Events and seven-day connection chart | Not stated | Not a history-viewing client |
-| Services, jobs, notifications | **Partial:** optional Companion plugin; background polling best effort (15 minutes), no running-job cancellation; service mutations need separate acceptance [10] | Not stated | Chat advertised; background scheduling not stated | Server notifications |
-| Device administration and invitations | **Partial:** name/description/tags/notes, move, remove/uninstall, group install links with QR/share (1/8/24/168 h); no group creation, policies or user administration [17] | Not stated | Not stated | Not a management client |
+| Events / power history | Up to 50 events, 100 recent transitions, seven-day chart; missing periods stay unknown [9] | Events and seven-day connection chart | Node events as push notifications; administrator log | Not a history-viewing client |
+| Services, jobs, notifications | **Partial:** optional Companion plugin; background polling best effort (15 minutes), no running-job cancellation; service mutations need separate acceptance [10] | Not stated | Push notifications with the app closed: criticality per node/group/tag, profiles, quiet hours, snooze; services and jobs not stated | Server notifications |
+| Device administration and invitations | **Partial:** name/description/tags/notes, move, remove/uninstall, group install links with QR/share (1/8/24/168 h); no group creation, policies or user administration [17] | Not stated | Users, user groups and device groups; agent install invitation links; guest links | Not a management client |
 | Settings backup | Password-encrypted settings export/import (PBKDF2-HMAC-SHA256, AES-256-GCM): profiles, favourites, shortcuts and opt-in login keys; no passwords, cookies, tokens or PIN [18] | Not stated | Not stated | Not applicable |
 | Launcher integration | Device launcher shortcuts and a Favorites home-screen widget [19] | Not stated | Not stated | Not applicable |
-| Device report and tags | Copy/save a localized text report of the Details tab; edit device tags in the admin dialog. **Partial:** tags are not shown in the list or used as filters [20] | Not stated | Not stated | Not applicable |
+| Device report and tags | Copy/save a localized text report of the Details tab; edit device tags in the admin dialog; tags are shown in the list and used in search and filters [20] | Not stated | Not stated | Not applicable |
 | Folder ZIP download | Download one folder as a ZIP with size/SHA-256 and ZIP64 structure checks. **Partial:** download only; no extraction or ZIP upload [21] | Not stated | Not stated | Not applicable |
-| Languages | 22 languages / 23 locale variants; in-app picker under Settings → Language; machine translations, not all reviewed by native speakers [11] | Not stated | Not stated | Not stated |
+| Languages | 22 languages / 23 locale variants; in-app picker under Settings → Language; machine translations, not all reviewed by native speakers [11] | Not stated | Italian and English | Not stated |
 
 ## Evidence for this app
 
@@ -138,10 +138,13 @@ Historical reports keep their original versions; newer scoped evidence supersede
   [distribution repository](https://github.com/pocketsized-apps/pocketmesh).
   The table deliberately does not assign a latest version without a verified release record.
 - **[M] MeshControl Pro:** [Google Play description](https://play.google.com/store/apps/details?id=org.meshcentral.androidclient)
-  and [developer website](https://www.rhelpy.com/meshcontrol-pro-landing.html).
-  SSH is advertised by the website; the store description only describes a shell. Prices are the
-  advertised euro prices on the website, not a quote for every region. No public source repository was
-  found in these listings; the proprietary label is a distribution observation, not a code audit.
+  (updated 2026-11-07) and [developer website](https://www.rhelpy.com/meshcontrol-pro-landing.html)
+  (version 1.4.5, 2026-11-01; Nuraghia s.r.l.), both checked on 2026-11-09. Most features in the column
+  come from the website, which lists more than the store description (SSH, consent, power actions, chat,
+  push notifications and administration). Prices are the advertised euro prices on the website, not a
+  quote for every region. The website calls the app commercial; no public source repository was found,
+  which is a distribution observation, not a code audit. Earlier versions of this page used older,
+  higher prices and listed several of these features as not stated.
 - **[A] Official agent:** [upstream README](https://github.com/Ylianst/MeshCentralAndroidAgent#readme).
   It explicitly states that remote desktop is view-only. Our conditional control support must not be
   read as an upstream agent release announcement.
