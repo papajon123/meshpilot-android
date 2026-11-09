@@ -2,7 +2,7 @@
 
 The app is a control tool used while looking at someone else's computer, so the interface is dark, quiet, and dense: the remote screen or terminal is the focus and the controls are a thin layer around it.
 
-This document describes the Compose interface prepared for 0.5.1. The default interface language is English; the release ships 22 languages in 23 locale variants and follows the system language.
+This document describes the Compose interface; it was written for 0.5.1 and updated for 0.12.6. The default interface language is English; the release ships 22 languages in 23 locale variants and follows the system language.
 
 ## Design tokens
 
@@ -51,12 +51,12 @@ Implementation rules:
 
 ## Device details and tool tabs
 
-Opening a computer from the list now leads to a device screen headed by its name, with a scrollable tab row: **Details**, **Desktop**, **Terminal**, **Files**, **SSH**, **SFTP**. The status of each connection is visible on the Details tab, so an unavailable tool is not a silent dead end.
+Opening a computer from the list now leads to a device screen headed by its name, with a scrollable tab row: **Details**, **Desktop**, **Terminal**, **Files**, **SSH**, **SFTP**, and, where supported, **Processes**, **Services**, **System**, **Help & jobs**, **Chat** and **Port forwarding**. A computer whose agent reports no desktop has no Desktop tab; its Details card explains why. The status of each connection is visible on the Details tab, so an unavailable tool is not a silent dead end.
 
 - Details shows group, operating system, address and Agent version, plus one card per connection. Cards explain the current availability, for example offline, unsupported, no permission, or “support or permission is unknown; the server will check”.
 - The Desktop tab keeps the existing native KVM flow. The Terminal and Files tabs control the Mesh Agent; SSH and SFTP use the server's SSH relays.
 - A known denial disables the tab. Unknown metadata enables an explicit attempt, with the server's answer shown in the tool surface.
-- Only one tool is selected at a time. Choosing another tab or opening Desktop closes the previous tool.
+- Up to two sessions stay open: one desktop plus one tool, or two tools. Switching tabs does not close the other session; a third session is refused until one is closed explicitly.
 - **Open web panel** launches the configured MeshCentral URL in a browser with a separate sign-in. It is the handoff for functions outside the native client and for entries that must not be operated from the app.
 
 ## Terminal
@@ -83,9 +83,9 @@ The switch happens on the agent, so the phone receives one display at a time and
 
 ## Language
 
-The default interface language is English. The 0.5.1 interface ships 22 languages in 23 locale variants: English, Russian, Simplified Chinese, Traditional Chinese, Spanish, French, Portuguese, German, Arabic, Hindi, Bengali, Urdu, Japanese, Korean, Indonesian, Turkish, Vietnamese, Thai, Italian, Persian, Tamil, Telugu, and Marathi. Simplified and Traditional Chinese are counted as one language and two locale variants. Each locale catalog contains the same 529 translated strings; the shared application name is not translated.
+The default interface language is English. The interface ships 22 languages in 23 locale variants: English, Russian, Simplified Chinese, Traditional Chinese, Spanish, French, Portuguese, German, Arabic, Hindi, Bengali, Urdu, Japanese, Korean, Indonesian, Turkish, Vietnamese, Thai, Italian, Persian, Tamil, Telugu, and Marathi. Simplified and Traditional Chinese are counted as one language and two locale variants. Each locale catalog contains the same translated strings (1548 in 0.12.6, checked by `ci/check_translations.py`); the shared application name is not translated.
 
-- Android 8–12 follows the system language. Android 13+ also exposes the app in the system per-app language settings; there is no separate in-app language picker.
+- **Settings → Language** picks the app language; by default it follows the system. Android 13+ also exposes the app in the system per-app language settings.
 - When no supported locale matches, Android falls back to the default catalog, which is English.
 - Arabic, Persian, and Urdu use a right-to-left layout; the session navigation arrow uses `Icons.AutoMirrored.Outlined.ArrowBack` and is mirrored automatically.
 - User-visible strings live in `res/values/strings.xml` and `res/values/runtime_strings.xml`, with one catalog per `values-*` locale directory. Runtime messages from `mesh/`, `input/`, `settings/`, and `web/` are referenced through `UiText.Resource`, so a language change re-renders pending status text. Server-provided text stays `UiText.Literal` and is shown verbatim.
@@ -105,8 +105,8 @@ Conventions:
 |---|---|---|
 | Onboarding | `ui/screens/OnboardingScreen.kt` | Brand header, feature rows, the server form, and one action that saves the server and ends the flow. |
 | Sign in | `ui/screens/LoginScreen.kt` | Lock badge, user name and password fields with a reveal toggle, two-factor card with e-mail/SMS/push request actions, status, and "continue without signing in". |
-| Computers | `ui/screens/DevicesScreen.kt` | Large title with live "n of m online", search field, All/Online/Favourites chips, grouped device cards with status, OS/address, favourite star, and Connect or a reason. |
-| Device | `ui/screens/DeviceScreen.kt` | Computer name, scrollable Details/Desktop/Terminal/Files/SSH/SFTP tabs, availability cards, web-panel handoff, and the selected tool surface. |
+| Computers | `ui/screens/DevicesScreen.kt` | Large title with live "n of m online", search field, All/Online/Favourites chips, group/OS/tag filters and CSV export of the shown list, grouped device cards with status, OS/address, favourite star, and Connect or a reason. |
+| Device | `ui/screens/DeviceScreen.kt` | Computer name, scrollable tool tabs (see above), availability cards, web-panel handoff, and the selected tool surface. |
 | Terminal | `ui/screens/TerminalScreen.kt` | Local xterm canvas, connection/auth status, recording notice, reconnect instructions, keyboard/control strip, explicit selection and copy. |
 | Files / SFTP | `ui/screens/FilesScreen.kt` | Path header, parent/refresh/new folder/upload, progress, file list, per-entry sheet, SAF pickers, confirmations, optional SSH/SFTP authentication form. |
 | Session | `ui/screens/RemoteDesktopScreen.kt` | Edge-to-edge canvas, floating HUD (back, computer, latency, hide), zoom pill, dock with pointer / keys / clipboard / more, connection stage overlay. |
@@ -115,7 +115,7 @@ Conventions:
 | Text sheet | `SessionSheets.kt` | Draft field with Send / Paste / Copy / Clear. |
 | Clipboard sheet | `SessionSheets.kt` | Two large actions (get from computer / send to computer), transfer status, and preview. |
 | Session options | `SessionSheets.kt` | Displays, geometry, quality and frame-rate sliders with presets, redraw, reconnect, full screen, hide controls. |
-| Settings | `ui/screens/SettingsScreen.kt` | Status strip plus Updates, Server, Security, Session, Data, and About sections. |
+| Settings | `ui/screens/SettingsScreen.kt` | Status strip, language picker and settings backup, then Server, Security, Session, Data and About sections; the GitHub build adds Updates. |
 | Server setup | `ui/screens/ServerSettingsScreen.kt` | Endpoint card with validation, debug-only switches, and one save action. |
 | Lock | `ui/screens/LockScreen.kt` | Lock badge, digit dots, feedback line, 3×4 keypad, Unlock and optional biometrics. |
 
@@ -123,7 +123,7 @@ Shared components live in `ui/components/Common.kt` (`MeshCard`, `SectionHeader`
 
 ## Navigation
 
-Three destinations — **PC**, **Session**, **Settings** — in a floating pill bar. Signing in and choosing a server are flows inside those destinations rather than separate tabs: the sign-in screen appears when the session is not authenticated and can be dismissed, onboarding runs once on first launch, and the session hides the tab bar so the canvas owns the window.
+Three destinations — **PC**, **Session**, **Settings** — in a floating pill bar. Signing in and choosing a server are flows inside those destinations rather than separate tabs: the sign-in screen appears when the session is not authenticated and can be dismissed, onboarding runs once on first launch, and the bar stays visible during a session; only full screen hides it so the canvas owns the window.
 
 The adaptive-layout work included in 0.5.1 keeps the active label visible: on narrow windows with a
 font scale of at least 1.3, it occupies a full-width caption below the three touch targets. Normal

@@ -1,6 +1,6 @@
 # Dependency migration (Dependabot PR 15)
 
-Status: locally built and independently reviewed on 2026-11-04; not merged or released.
+Status: merged to `main` and shipped in 0.10.0 (AGP 9.5.0, Gradle 9.8.2, OkHttp 5.5.1).
 
 ## Scope
 

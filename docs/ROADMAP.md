@@ -1,9 +1,11 @@
 # Roadmap
 
-## Current status: 0.10.6 (code 40)
+## Current status: 0.12.6 (code 48)
+
+- Since 0.10.6: agent terminal shell choice, computer filters by group/OS/tag with CSV export, more room while typing, automatic closing of refused terminal/file sessions, no Desktop tab for agents without a display, and the agent core build as its version. Google Play closed testing is active; the public Play release waits for 12 testers over 14 days ([how to join](PLAY_TESTING.md)).
 
 - Chat with the computer user, TCP port forwarding, device administration and invitations, consent requests, picture-in-picture, an in-app language picker and encrypted settings backups are implemented; see [the feature comparison](COMPARISON.md).
-- The sections below record earlier directions and releases. They are kept for history and are not a schedule for 0.10.6.
+- The sections below record earlier directions and releases. They are kept for history and are not a schedule for 0.12.6.
 
 ## Direction for 0.8
 

@@ -4,7 +4,7 @@ This is a technical privacy note for the app, not legal advice. The app is a cli
 organisation running the MeshCentral server decides what the server logs and who can access it.
 
 This note describes the current source, including server-key approval and the opt-in update check
-under **Unreleased** in [CHANGELOG.md](CHANGELOG.md). Published releases may have different features.
+as of release 0.12.6 in [CHANGELOG.md](CHANGELOG.md). Published releases may have different features.
 
 ## Summary
 
@@ -89,7 +89,7 @@ access, just as for any other selected server.
 ### Optional GitHub update checks
 
 Update checks are off until you agree in the consent dialog or enable them in Settings. The dialog is
-shown once after installation and once per installed version after an update; dismissing it leaves
+shown after the first successful sign-in and once per installed version after an update; dismissing it leaves
 checks off. Settings lets you disable checks, check when due, postpone a release or skip a version.
 
 With consent, while the app is in the foreground it reads the ten most recent public releases from

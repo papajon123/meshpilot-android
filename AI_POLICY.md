@@ -18,7 +18,7 @@ In the maintainer's words:
 
 - **Every change in GitLab.** Development happens in a private GitLab repository. Every branch with a change runs a check pipeline: the translation check, tests of the CI scripts, JVM tests, lint and a debug build.
 - **Every signed release.** Before publication, GitHub Actions runs JVM tests, lint and instrumented tests on Android 8 (API 26) and Android 15 (API 35) emulators. [`ci/verify_apk.py`](ci/verify_apk.py) then checks the signed APK: its package name, its version and the signing certificate pinned in [`ci/release-identity.json`](ci/release-identity.json).
-- **Test suite.** About 250 JVM tests and about 150 instrumented tests. Some optional live tests are skipped.
+- **Test suite.** About 900 JVM tests and about 800 instrumented tests. Some optional live tests are skipped.
 
 ## Security rules
 

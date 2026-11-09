@@ -107,7 +107,7 @@ These properties are implemented in the current source tree:
 - The raw Debug WebView is available only in debug builds and does not inherit native pins. It disables
   file and content access and blocks mixed content.
 - Screenshot blocking is optional and uses `FLAG_SECURE` when enabled.
-- The app has no in-app updater or installer. GitHub Releases distribute APKs; a separately configured F-Droid client can manage repository updates.
+- The app has no in-app updater or installer. GitHub Releases distribute APKs; Google Play closed testing delivers the Play build to testers. If Google Play refuses to install over a GitHub APK, uninstall the GitHub version first.
 
 ## Updates
 

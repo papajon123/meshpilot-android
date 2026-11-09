@@ -59,6 +59,7 @@ Also: up to 20 server profiles, search with group/OS/tag filters, CSV export, fa
 - **Filter computers** by group, operating system and tag; tags are shown on the list and included in search. **Export** the shown list as CSV.
 - **More room while typing:** with the keyboard open, the terminal gets most of the screen. Back keeps a desktop session running; End session is a separate control.
 - A clear message when a computer cannot start a session, instead of reporting a consent refusal.
+- **Fixes in 0.12.4–0.12.6:** a terminal or file session the computer refuses closes by itself with the reason; a computer whose agent reports no desktop (for example Ubuntu Server without a graphical session) has no Desktop tab; the agent version shows the agent's core build when it reports version 0.
 
 See the [changelog](CHANGELOG.md) for every release.
 
@@ -102,11 +103,12 @@ This is a small independent project in public preview. The most useful help righ
 
 #### Devices, search and profiles
 
-- Browse groups and computers, filter by online status or favourites, and see OS, address and Agent version.
+- Browse groups and computers, filter by online status, favourites, group, operating system and tag, and see OS, address and Agent version.
 - Phones with the official Android agent: live battery, cached system/network information, screen viewing, files and vibration, flashlight, message, link and dial-pad requests after confirmation. Submission is not proof of execution; console actions also need Console permission. Input requires the modified agent described above.
 - Search the loaded list by device name, group, host/IP or OS. The query is Unicode-normalised and case-insensitive; every word must match (AND). Typing does not send a request.
 - Keep up to 20 recently opened computers per profile and account. The scope key is hashed; device names and addresses are not stored in the recent list.
 - Keep several server profiles (up to 20) with separate URLs, credentials, favourites and recent devices. The first profile is migrated from the existing settings. Credentials and favourites are profile-scoped; the app PIN and privacy switches stay global. Switching or deleting a profile closes its sessions.
+- Export and import settings as a password-encrypted backup (PBKDF2-HMAC-SHA256, AES-256-GCM): profiles, favourites, shortcuts and, if you choose, login keys; passwords, cookies, tokens and the PIN are never included. Device launcher shortcuts and a Favorites home-screen widget complement the launcher.
 
 #### Sessions and the remote tools
 

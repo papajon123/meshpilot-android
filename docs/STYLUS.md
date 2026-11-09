@@ -1,4 +1,6 @@
-# Stylus / S Pen — M8, planned for 0.8.1
+# Stylus / S Pen — M8, shipped in 0.8.2
+
+This is the design and validation record of the feature as built; current behaviour is summarised in the README and [comparison](COMPARISON.md).
 
 This work adds pen input to the existing native desktop canvas. It does not change the 0.8.0 release
 version, add a server extension or publish a build. Source branch: `mr/stylus`.

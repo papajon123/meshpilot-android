@@ -10,8 +10,8 @@ This checks metadata, not APK bytes. The APK is never downloaded by the client. 
 the computed GitHub release page using `ACTION_VIEW`; installation is the user's choice in Android.
 Release tags and response bodies never become arbitrary browser URLs or log messages.
 
-Consent is requested once per installed `versionCode`, after the app lock if enabled, including before
-server setup. Dismissal means **Not now**. Consent and update preferences are global, independent of
+Consent is requested once per installed `versionCode`, after the first successful sign-in (not during
+first-run server setup) and after the app lock if enabled. The Google Play build has no update check. Dismissal means **Not now**. Consent and update preferences are global, independent of
 server profiles. A new installed version needs a new answer before requests can resume.
 
 Both automatic foreground entry and **Check now** obey a 24-hour interval. Errors, cancellation and
@@ -31,7 +31,7 @@ In PowerShell, with the JDK and Android SDK configured:
 
 ```powershell
 python ci/check_translations.py
-.\gradlew.bat testDebugUnitTest lintDebug assembleDebug
+.\gradlew.bat testDirectDebugUnitTest testPlayDebugUnitTest lintDirectDebug assembleDirectDebug
 ```
 
 `GitHubReleaseSourceTest` uses synthetic JSON fixtures and MockWebServer, with no external network.
@@ -40,7 +40,7 @@ The optional live test is disabled by default. To explicitly check the public re
 
 ```powershell
 $env:MESH_UPDATE_LIVE_CHECK = '1'
-.\gradlew.bat testDebugUnitTest --tests 'ru.papajon.meshcentralmobile.update.GitHubReleaseSourceLiveTest'
+.\gradlew.bat testDirectDebugUnitTest --tests 'ru.papajon.meshcentralmobile.update.GitHubReleaseSourceLiveTest'
 Remove-Item Env:MESH_UPDATE_LIVE_CHECK
 ```
 

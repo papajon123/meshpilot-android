@@ -38,4 +38,4 @@ MeshPilot is an independent client for MeshCentral servers, not affiliated with 
 
 **Исправление 0.10.1:** устранено падение при открытии системного выбора или сохранения файла. Проверены настоящие окна Android и отмена выбора; разблокировка через блокировку экрана Android сохранена.
 
-See [CHANGELOG](https://github.com/papajon123/meshcentral-android/blob/main/CHANGELOG.md) and [known limitations](https://github.com/papajon123/meshcentral-android/blob/main/docs/KNOWN_LIMITATIONS.md). This is a prerelease. Physical-phone acceptance and Google Play distribution remain pending.
+See [CHANGELOG](https://github.com/papajon123/meshcentral-android/blob/main/CHANGELOG.md) and [known limitations](https://github.com/papajon123/meshcentral-android/blob/main/docs/KNOWN_LIMITATIONS.md). This is a prerelease. Google Play closed testing is active ([how to join](https://github.com/papajon123/meshpilot-android/blob/main/docs/PLAY_TESTING.md)); the public Play release and physical-phone acceptance remain pending.

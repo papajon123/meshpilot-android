@@ -11,7 +11,7 @@ This is a small, preliminary Android project. Small, focused changes with clear 
 
 ## Build
 
-Requirements: JDK 17, Android SDK platform 36, build-tools 35.0.0.
+Requirements: JDK 17, Android SDK platform 37 and build-tools 36.0.0 (35.0.0 is also used to verify APKs).
 
 Windows PowerShell:
 
@@ -34,13 +34,13 @@ export ANDROID_HOME="$HOME/Android/Sdk"
 Run all three before opening a pull request:
 
 ```bash
-./gradlew testDebugUnitTest lintDebug assembleDebug
+./gradlew testDirectDebugUnitTest testPlayDebugUnitTest lintDirectDebug lintPlayDebug assembleDirectDebug
 ```
 
 UI changes also need instrumented tests:
 
 ```bash
-./gradlew connectedDebugAndroidTest
+./gradlew connectedDirectDebugAndroidTest
 ```
 
 Run `connectedDebugAndroidTest` only on a dedicated emulator or test device that contains no personal data. Use reserved example domains such as `https://meshcentral.example.com/` and synthetic device names; never a real account, a production server, or a third-party server without explicit permission.

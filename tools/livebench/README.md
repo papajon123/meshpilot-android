@@ -34,7 +34,7 @@ controls owned fixtures and provides independently computed source hashes.
 ## Requirements
 
 - Windows, PowerShell 7, Node.js/npm, Python 3, and WSL `Ubuntu-24.04` with systemd.
-- JDK 17 (`JAVA_HOME`) and Android SDK platform/build-tools 35 (`ANDROID_HOME`).
+- JDK 17 (`JAVA_HOME`) and Android SDK platform 37 with build-tools 36.0.0; 35.0.0 is also used for APK verification (`ANDROID_HOME`).
 - Existing AVDs `PublicCompatibility35` and `PublicReadiness`. The default
   `ANDROID_AVD_HOME` is the owner's `orca/workspaces/other/Meshcentral-Android/state/public-avd-home`
   under the user profile; override it with `-AvdHome C:\bench\avds` if necessary.

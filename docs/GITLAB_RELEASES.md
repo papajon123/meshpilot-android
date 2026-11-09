@@ -37,9 +37,9 @@ Use the pinned Android SDK 36 image and dedicated protected runner **15** with t
 Serialize publication jobs with one `resource_group`.
 Only the checks job caches Gradle data under a project-specific key; the publication job does not
 restore this cache. GitLab's separate protected-ref cache scope should remain enabled.
-The image includes platform 36. Checks retain Build Tools 35.0.0, installing them only on a cache
-miss and caching them in `.android-sdk-cache/build-tools/` alongside Gradle data. Main/release and
-review cache keys are separated and include `android-36`.
+The jobs install platform 37.0 and Build Tools 36.0.0; checks also retain Build Tools 35.0.0 for APK
+verification, installing them only on a cache miss and caching them in `.android-sdk-cache/build-tools/`
+alongside Gradle data. Main/release and review cache keys are separated and include `android-37`.
 
 Configure these variables with **environment scope `github-release`**, so the normal build/Gradle
 jobs cannot read the deployment credential:

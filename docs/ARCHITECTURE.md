@@ -12,7 +12,7 @@ The primary path is Kotlin and Jetpack Compose. The desktop is native KVM; Agent
 2. **Sign-in and control channel.** `MeshCentralClient` opens `wss://<host>/control.ashx` with `x-meshauth`, handles two-factor challenges, requests `serverinfo`, `userinfo`, `meshes`, `nodes` and `authcookie`, and keeps the device list current.
 3. **Device details.** `DeviceScreen` presents Details, Desktop, Terminal, Files, SSH, SFTP, Processes, Services, System, Help & jobs, Chat with user and Port forwarding. `SessionAvailability` decides `Available`, `Unknown`, `Offline`, `Unsupported` or `Denied`. Known denial is blocked; unknown permits an explicit attempt; the server remains the authority.
 4. **Desktop.** `MeshDesktopRelay` requests a control-channel tunnel, opens `/meshrelay.ashx?browser=1&p=2`, performs the text `c`/`cr` handshake, sends protocol `2`, then decodes KVM frames. The existing reconnect and framebuffer path is unchanged.
-5. **Agent terminal.** `ManagedRelayConnection` opens the relay with usage `1`, asks the Agent to dial the tunnel, waits for `c`/`cr`, sends the `xterm` options and protocol `1`. `TerminalController` passes raw bytes to the local renderer and sends input/resize back.
+5. **Agent terminal.** `ManagedRelayConnection` opens the relay with the usage of the selected shell (`1` default, `6` PowerShell, `8` user shell, `9` user PowerShell; `6`/`9` on Windows only), asks the Agent to dial the tunnel, waits for `c`/`cr`, sends the `xterm` options and protocol `1`. `TerminalController` passes raw bytes to the local renderer and sends input/resize back.
 6. **Agent files.** The same relay type opens usage `5`. `FilesController` speaks the Agent file protocol: JSON listing/control messages plus 16,380-byte upload/download chunks. SAF supplies source and destination streams.
 7. **SSH terminal and SFTP.** The server-side SSH relays are `/sshterminalrelay.ashx` and `/sshfilesrelay.ashx`. The viewer URL carries the device `nodeid` and the **same server-issued `authcookie`** used by the native control/relay path. `TerminalController` handles SSH auth prompts and `~data`; `FilesController` plus `SftpFilesAdapter` handle SFTP authentication, listings and transfers.
 8. **Rendering.** Binary KVM frames are reassembled and composited by `KvmFramebuffer`; Compose draws the framebuffer. The terminal renderer is a local WebView serving bundled xterm assets, with no transport, authentication or filesystem responsibility.
@@ -24,7 +24,7 @@ The control/desktop wire formats are in [PROTOCOL.md](PROTOCOL.md); its compatib
 | Tool | Endpoint | Protocol / handshake | Ownership |
 |---|---|---|---|
 | Desktop | `/meshrelay.ashx?p=2` | KVM over binary relay | `MeshDesktopRelay` |
-| Agent terminal | `/meshrelay.ashx?p=1` | Agent relay: `c`/`cr`, options, `1` | `ManagedRelayConnection` + `TerminalController` |
+| Agent terminal | `/meshrelay.ashx?p=1` (`6`/`8`/`9` by shell) | Agent relay: `c`/`cr`, options, `1` | `ManagedRelayConnection` + `TerminalController` |
 | Agent files | `/meshrelay.ashx?p=5` | Agent relay: `c`/`cr`, `5`; JSON + binary | `ManagedRelayConnection` + `FilesController` |
 | SSH | `/sshterminalrelay.ashx?nodeid=…&auth=…` | server-side SSH relay | `ManagedRelayConnection` + `TerminalController` |
 | SFTP | `/sshfilesrelay.ashx?nodeid=…&auth=…` | server-side SFTP relay | `ManagedRelayConnection` + `FilesController` |
@@ -55,7 +55,7 @@ All endpoints are on the configured MeshCentral server. Agent terminal/files als
 
 - Rights and capability fields are optional inputs. A known `NOTERMINAL`/`NOFILES` denial, missing remote-control right, known offline state or known disabled server feature blocks the tab.
 - Missing metadata is `Unknown`, not a grant: the tab enables an explicit attempt and the server's refusal is shown. The app does not invent SSH support, file permission or host-key trust.
-- Selecting another tool, or opening Desktop, closes the previous tool. The UI does not create a second terminal/file surface in parallel.
+- Up to two sessions can be open at once: one desktop plus one tool, or two tools; a third is refused until one is closed. `ConnectionWorkspace` and `SessionRegistry` own them across Activity recreation. A terminal or file session the computer refuses is closed automatically with the reason.
 - `MeshSessionViewModel` survives ordinary Activity recreation, so the relay, controller, terminal renderer and pending file-download selection remain. Secrets are never written to a Bundle or saved state.
 - Logout, a changed server/account identity, control-channel failure/closure, authentication rejection or a stale device snapshot invalidates tool relays. Closing is final; tools do not reconnect automatically.
 - Agent terminal/files, SSH and SFTP replay neither input nor file mutations. A new session is an explicit user action. The desktop keeps its existing separate resume/reconnect behaviour.
@@ -204,7 +204,7 @@ A reverse proxy or certificate problem is reported as a connection failure; the 
 
 ## Testing strategy
 
-JVM tests cover control parsing, KVM framing, input encoding, relay construction, availability rules, Agent/SFTP protocol handling and terminal buffering. Instrumented tests cover Compose navigation, real Activity recreation, terminal renderer behaviour and file controllers; opt-in live tests require an isolated MeshCentral fixture. Feature checks used a real isolated Linux Agent and SSH/SFTP host on npm MeshCentral 1.2.5. The 1.2.6 package was source-audited, not run as a server. Physical-phone, Windows-Agent and live restrictive-rights/consent checks remain open. See [VALIDATION.md](VALIDATION.md); test presence is not a pass result.
+JVM tests cover control parsing, KVM framing, input encoding, relay construction, availability rules, Agent/SFTP protocol handling and terminal buffering. Instrumented tests cover Compose navigation, real Activity recreation, terminal renderer behaviour and file controllers; opt-in live tests require an isolated MeshCentral fixture. Early feature checks used a real isolated Linux Agent and SSH/SFTP host on npm MeshCentral 1.2.5; the current livebench and Play demo fixtures run MeshCentral 1.3.1. Physical-phone, Windows-Agent and live restrictive-rights/consent checks remain open. See [VALIDATION.md](VALIDATION.md); test presence is not a pass result.
 
 ## Non-goals
 

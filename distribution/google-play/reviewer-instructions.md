@@ -1,12 +1,12 @@
 # Reviewer instructions — MeshPilot (Google Play)
 
-**Status: not ready for Google submission.** The local-only Docker fixture in `demo/` has been built and tested: admin and restricted reviewer sign in, an invalid password is rejected, and exactly one synthetic agent is online. No public HTTPS review endpoint is published. Desktop, terminal, files and SSH/SFTP review scenarios still need end-to-end acceptance on the publicly reachable fixture. Do not use a maintainer's, customer's, or other user's MeshCentral server or computers for review.
+**Status: Google Play closed testing (Alpha) since 2026-11-07; no production release yet.** The local-only Docker fixture in `demo/` has been built and tested: admin and restricted reviewer sign in, an invalid password is rejected, and exactly one synthetic agent is online. No public HTTPS review endpoint is published. Desktop, terminal, files and SSH/SFTP review scenarios still need end-to-end acceptance on the publicly reachable fixture. Do not use a maintainer's, customer's, or other user's MeshCentral server or computers for review.
 
 ## 1. What the reviewer is testing
 
 MeshPilot is an independent Android client for a MeshCentral server. It is not a MeshCentral agent and does not install, host, or administer the server. The reviewer needs a working HTTPS MeshCentral instance and an account on it; the app has no preconfigured server, account, or demo content.
 
-The planned Google Play build must not check GitHub for updates, must not offer external updates, and must not show the project's support/donation link. This is a build requirement, not yet a verified property of a published artifact.
+The Google Play build (`play` flavor) does not check GitHub for updates, does not offer external updates and does not show the project's support/donation link (`app/build.gradle.kts`). Verify this on the closed-testing artifact.
 
 ## 2. Isolated review stand
 
@@ -71,7 +71,7 @@ Run these on the Play-delivered build, not on a locally built debug APK.
 ## 7. Known gaps before this can be submitted
 
 - The local fixture is verified only on loopback. A public HTTPS endpoint, trusted certificate and Google reviewer access are still required.
-- Local Play-build tests verify the disabled external updater and hidden support link; the Play-delivered signed build is not yet available.
+- Local Play-build tests verify the disabled external updater and hidden support link; the signed Play build is delivered to closed testers; a production build is not yet available.
 - The owner selected `papajon1234@gmail.com` as the public support contact; reviewer access is separate.
 - Local test credentials exist only in the owned Docker runtime. They must not be reused as public review credentials or committed to this repository.
 - This document is not a substitute for the Play Console App access declaration.

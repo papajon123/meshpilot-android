@@ -15,7 +15,7 @@
 | Сервер и аккаунт не преднастроены; нужен HTTPS-сервер пользователя | `README.md:51-53` | Play-сборка должна сохранить это поведение |
 | Основные инструменты не требуют серверного плагина | `README.md:73` | Дополнительные функции плагина в листинге не обещаются |
 | Android backup и device transfer отключены | `app/src/main/AndroidManifest.xml:15-18`; `app/src/main/res/xml/backup_rules.xml:2-5`; `app/src/main/res/xml/data_extraction_rules.xml:3-12` | Проверить merged manifest финального артефакта |
-| В текущем общем исходнике есть GitHub-обновления и ссылка поддержки | `app/src/main/java/ru/papajon/meshcentralmobile/ui/MeshCentralApp.kt:848`; `app/src/main/java/ru/papajon/meshcentralmobile/ui/screens/SettingsScreen.kt:398-400` | Планируемая Play-сборка должна их исключить; отдельная Play-сборка в прочитанном `app/src/main` не подтверждена |
+| В текущем общем исходнике есть GitHub-обновления и ссылка поддержки | `app/src/main/java/ru/papajon/meshcentralmobile/ui/MeshCentralApp.kt:848`; `app/src/main/java/ru/papajon/meshcentralmobile/ui/screens/SettingsScreen.kt:398-400` | Play-сборка (flavor `play`) их исключает (`app/build.gradle.kts`); подтвердить на подписанном артефакте закрытого теста |
 
 ## 2. Сетевые потоки
 
@@ -86,7 +86,7 @@
 
 ## 6. Открытые вопросы
 
-1. **Play-вариант не подтверждён.** В текущем общем исходнике блок обновлений и `SupportCard` включены (`MeshCentralApp.kt:848`, `SettingsScreen.kt:398-400`). Нужна отдельная сборка/флаг, в которой нет GitHub-запросов, внешних обновлений и ссылки поддержки, плюс проверка отсутствия таких экранов и сетевых вызовов.
+1. **Play-вариант реализован.** Flavor `play` отключает GitHub-обновления, внешнее обновление и ссылку поддержки (`app/build.gradle.kts`). Осталось подтвердить отсутствие таких экранов и сетевых вызовов на подписанном артефакте закрытого теста.
 2. **Self-hosted сервер и «collection».** Нужно письменно зафиксировать, считает ли Google передачу на сервер, который контролирует пользователь, сбором данных разработчиком, и какие категории указывать.
 3. **Маппинг credentials, files, messages и diagnostics** на категории Data safety не решён; нельзя выдавать предположение за ответ Console.
 4. **Account deletion.** Собственного аккаунта у проекта нет; аккаунты и данные на сервере контролирует оператор. Нужно проверить, требуется ли Play-URL удаления аккаунта и как описать удаление серверных данных.
