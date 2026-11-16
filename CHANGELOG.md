@@ -1,3 +1,10 @@
+# 0.13.0 — 2026-11-17
+
+- Keep the remote desktop within the measured area between controls and the keyboard; all four edges remain reachable.
+- Preserve the working point when the available area changes and when using the zoom buttons.
+- Keep Fit available after panning at 100%; prevent local control actions from becoming remote clicks.
+- Move development, issue tracking and release verification to GitHub; preserve explicitly labelled historical records.
+
 # 0.12.6 — 2026-11-08
 
 - A computer whose Mesh Agent reports no desktop (for example Ubuntu Server without a graphical session) no longer

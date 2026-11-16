@@ -1,11 +1,18 @@
 name: Android checks
-# GitHub `main` only receives release snapshots: the GitLab bridge pushes `main` and the release tag
-# atomically, and release.yml runs these checks for that exact commit. A separate push trigger would
-# test the same tree twice and make both runs compete for emulator runners.
+# GitHub is the development and release place: pull requests and pushes to `main` run these checks.
+# release.yml also calls this workflow for the tagged commit. Only `main` is a push branch, so a
+# change is checked in its pull request and after merge, not again on every branch push.
 on:
   pull_request:
+  push:
+    branches: [main]
   workflow_call:
   workflow_dispatch:
+concurrency:
+  # Superseded pull-request runs are cancelled. Push and tag/release runs keep their own ref
+  # group and are never cancelled, so a release check cannot be interrupted by a newer run.
+  group: android-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 permissions:
   contents: read
 jobs:

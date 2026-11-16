@@ -36,12 +36,12 @@ Google разрешает опубликовать новое приложени
   Ещё помогает очистка кеша приложения Google Play (Настройки → Приложения → Google Play Маркет → Хранилище).
 - **Уже стоит APK с GitHub.** Если Google Play отказывается ставить или обновлять приложение, удалите версию с
   GitHub и установите из Google Play.
-- **Не помогло?** Спросите в [обсуждениях](https://github.com/papajon123/meshcentral-android/discussions) или
-  создайте [обращение](https://github.com/papajon123/meshcentral-android/issues). Не публикуйте адреса серверов и
+- **Не помогло?** Спросите в [обсуждениях](https://github.com/papajon123/meshpilot-android/discussions) или
+  создайте [обращение](https://github.com/papajon123/meshpilot-android/issues). Не публикуйте адреса серверов и
   пароли.
 
 ## Отзывы
 
 Что работает и что нет, можно рассказать через
-[форму отчёта об устройстве](https://github.com/papajon123/meshcentral-android/issues/new?template=device_report.yml)
+[форму отчёта об устройстве](https://github.com/papajon123/meshpilot-android/issues/new?template=device_report.yml)
 или письмом в группу <meshpilot-testers@googlegroups.com>.

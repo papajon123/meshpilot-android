@@ -44,4 +44,44 @@ class TrackpadMotionTest {
     @Test fun invalidViewportLeavesStateAlone() {
         assertEquals(TrackpadMotion(10f, 20f, 0f, 0f), RemoteViewport(0, 0, 0, 0).moveTrackpad(10f, 20f, 5f, 5f))
     }
+
+    @Test fun followsCursorInsideTheAreaLeftByTopBarAndDock() {
+        val viewport = RemoteViewport(
+            canvasWidth = 400,
+            canvasHeight = 800,
+            remoteWidth = 400,
+            remoteHeight = 400,
+            zoom = 2f,
+            insets = ViewportInsets(top = 100f, bottom = 200f),
+        )
+        for ((dx, dy) in listOf(1000f to 0f, -1000f to 0f, 0f to 1000f, 0f to -1000f)) {
+            val result = viewport.moveTrackpad(200f, 200f, dx, dy)
+            val view = viewport.copy(panX = result.panX, panY = result.panY)
+            val point = view.toCanvas(result.x.toInt(), result.y.toInt())
+            assertTrue("cursor x ${point.first} left the free area",
+                point.first in view.availableLeft..view.availableRight)
+            assertTrue("cursor y ${point.second} is under a panel",
+                point.second in view.availableTop..view.availableBottom)
+            assertTrue(view.hitsImage(point.first, point.second))
+        }
+    }
+
+    @Test fun keyboardOpeningMovesThePointerOutFromUnderIt() {
+        val open = RemoteViewport(400, 800, 400, 400, zoom = 2f)
+            .copy(insets = ViewportInsets(bottom = 300f))
+
+        val result = open.moveTrackpad(200f, 390f, 0f, 1f)
+        val view = open.copy(panX = result.panX, panY = result.panY)
+        val point = view.toCanvas(result.x.toInt(), result.y.toInt())
+
+        assertTrue("pointer y ${point.second} stayed under the keyboard",
+            point.second <= view.availableBottom)
+        assertTrue(view.hitsImage(point.first, point.second))
+    }
+
+    @Test fun fullyCoveredCanvasLeavesTrackpadStateAlone() {
+        val covered = RemoteViewport(400, 800, 400, 400, insets = ViewportInsets(top = 800f))
+
+        assertEquals(TrackpadMotion(10f, 20f, 0f, 0f), covered.moveTrackpad(10f, 20f, 5f, 5f))
+    }
 }

@@ -154,4 +154,4 @@ Stylus support was checked against the same sources on 2026-10-26; none of them 
 The MeshCentral web panel remains the reference for server administration and tools this client does
 not implement; see [why use a mobile client](../README.md#why-not-just-the-web-panel). This comparison
 claims neither complete web-panel parity nor a performance advantage. The [AI policy](../AI_POLICY.md)
-describes how this app is developed. Please [report corrections](https://github.com/papajon123/meshcentral-android/issues).
+describes how this app is developed. Please [report corrections](https://github.com/papajon123/meshpilot-android/issues).

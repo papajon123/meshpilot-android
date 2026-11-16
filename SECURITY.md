@@ -8,7 +8,7 @@ This is a preliminary open-source release. Only the latest published preview is 
 
 Use GitHub private vulnerability reporting:
 
-<https://github.com/papajon123/meshcentral-android/security/advisories/new>
+<https://github.com/papajon123/meshpilot-android/security/advisories/new>
 
 Do not open a public issue containing exploit details, credentials, session cookies, relay or tunnel identifiers, real server names or addresses, or screenshots of a working desktop. A desktop screenshot can expose documents, notifications, and account names even when the app is not visible.
 

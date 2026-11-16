@@ -1,6 +1,6 @@
 # Contributing
 
-This is a small, preliminary Android project. Small, focused changes with clear evidence are easiest to review. Open an issue before a large refactor or a protocol change.
+This is a small, preliminary Android project. Small, focused changes with clear evidence are easiest to review. Every independent task starts with an issue; open or find one before a large refactor, a protocol change or other non-trivial work.
 
 ## Before you start
 
@@ -56,22 +56,23 @@ Unit tests must stay offline and deterministic. They cover control-message parsi
 - User-facing strings belong in `app/src/main/res/values/strings.xml`; do not hard-code new UI strings in composables.
 - Do not claim SSO support, self-signed certificates in release builds, or compatibility with every MeshCentral version. Test and document only what the code actually supports.
 
-## Pull requests
+## Issues and pull requests
 
-GitHub remains the public place for issues and proposed changes. Maintainers develop and integrate
-accepted changes in a private GitLab repository, then publish a checked source snapshot and APK.
-GitHub `main` contains release snapshots rather than the private development history. A contribution
-may therefore be integrated in GitLab and linked from its release instead of being merged directly
-into GitHub `main`. See [the release workflow](docs/GITLAB_RELEASES.md).
+GitHub is the single place for issues, proposed changes, checks and releases. Before non-trivial
+work, find or open an issue and state the goal and acceptance criteria; a question answered without
+work does not need one. Public issues must not contain server addresses, credentials, personal data
+or private build details. See [issue tracking](docs/issue-tracking.md).
 
-In GitLab every change, including AI-assisted work, lands through a merge request from a protected
-`mr/<topic>` branch. Its pipeline runs the translation, script, JVM, lint and build checks; release
-signing and publication jobs run only on `main` and release tags. The maintainer reviews the code, the
-architecture and the behaviour, then merges.
+Every change, including AI-assisted work, lands through a pull request from a branch named
+`mr/<issue>-<topic>`. Pull requests and pushes to `main` run the translation, script, JVM, lint and
+build checks plus the device matrix; the required `Android checks` must pass before a merge. Signing
+and publication run only from a `v*` tag on `main` through the GitHub `release` environment. The
+maintainer, or an authorized agent after an independent review, merges and publishes.
 
+- Link the issue with `Closes #<number>` when the merge should close it.
 - Keep the change focused; describe the user-visible behaviour and the reason for it.
 - Include the commands you ran and their result. Screenshots of synthetic data are welcome; screenshots of a real desktop are not.
-- Do not bump `versionCode`/`versionName`, change signing configuration, or publish a release; the maintainer handles versioning and signing.
+- Do not bump `versionCode`/`versionName`, change signing configuration, or publish a release in an ordinary contribution; the release process handles versioning and signing.
 - Do not commit generated APKs, build output, keystores, or local SDK paths.
 - Contributions made with AI tools are accepted if the pull request description says so and includes the commands you ran and their result. You are responsible for the licensing of the change, and it must not contain data from real servers. See the [AI policy](AI_POLICY.md).
 

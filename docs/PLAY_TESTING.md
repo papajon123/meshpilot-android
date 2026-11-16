@@ -33,11 +33,11 @@ keeping the app installed already helps.
   Google Play app (Settings → Apps → Google Play Store → Storage) also helps.
 - **The APK from GitHub is already installed.** If Google Play refuses to install or update it, uninstall the GitHub
   version first, then install from Google Play.
-- **Still stuck?** Ask in [Discussions](https://github.com/papajon123/meshcentral-android/discussions) or open an
-  [issue](https://github.com/papajon123/meshcentral-android/issues). Never post server addresses or credentials.
+- **Still stuck?** Ask in [Discussions](https://github.com/papajon123/meshpilot-android/discussions) or open an
+  [issue](https://github.com/papajon123/meshpilot-android/issues). Never post server addresses or credentials.
 
 ## Feedback
 
 Tell what works and what does not with the
-[device report form](https://github.com/papajon123/meshcentral-android/issues/new?template=device_report.yml), or
+[device report form](https://github.com/papajon123/meshpilot-android/issues/new?template=device_report.yml), or
 write to the group <meshpilot-testers@googlegroups.com>.

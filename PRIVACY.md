@@ -93,7 +93,7 @@ shown after the first successful sign-in and once per installed version after an
 checks off. Settings lets you disable checks, check when due, postpone a release or skip a version.
 
 With consent, while the app is in the foreground it reads the ten most recent public releases from
-`https://api.github.com/repos/papajon123/meshcentral-android/releases?per_page=10`, including prereleases,
+`https://api.github.com/repos/papajon123/meshpilot-android/releases?per_page=10`, including prereleases,
 then reads `release-info.json` and `SHA256SUMS` from their GitHub release assets. Asset requests may
 redirect to GitHub's `release-assets.githubusercontent.com` CDN. These are unauthenticated GET requests
 through a separate HTTP client with no cookies, tokens, MeshCentral server address, credentials,

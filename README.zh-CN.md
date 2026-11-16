@@ -5,15 +5,15 @@
 <p align="center"><strong>面向你自己的 MeshCentral 服务器的独立 Android 客户端：在手机或平板上查看计算机，并使用桌面、终端、文件、SSH 和 SFTP。</strong></p>
 
 > [!NOTE]
-> **MeshPilot 是独立的第三方应用**（原名“MeshCentral Mobile”），与 MeshCentral 项目及其开发者没有关联，也未获其认可或支持。请在[本仓库的 Issues](https://github.com/papajon123/meshcentral-android/issues) 中报告本应用的问题，而不要向 MeshCentral 团队报告。
+> **MeshPilot 是独立的第三方应用**（原名“MeshCentral Mobile”），与 MeshCentral 项目及其开发者没有关联，也未获其认可或支持。请在[本仓库的 Issues](https://github.com/papajon123/meshpilot-android/issues) 中报告本应用的问题，而不要向 MeshCentral 团队报告。
 
 <p align="center">
-  <a href="https://github.com/papajon123/meshcentral-android/releases/latest"><img src="https://img.shields.io/badge/%E4%B8%8B%E8%BD%BD-APK-4FC3F7?style=for-the-badge&amp;logo=android&amp;logoColor=white" alt="下载已签名的 APK"></a>
+  <a href="https://github.com/papajon123/meshpilot-android/releases/latest"><img src="https://img.shields.io/badge/%E4%B8%8B%E8%BD%BD-APK-4FC3F7?style=for-the-badge&amp;logo=android&amp;logoColor=white" alt="下载已签名的 APK"></a>
   <a href="https://github.com/ImranR98/Obtainium"><img src="https://img.shields.io/badge/%E6%9B%B4%E6%96%B0-Obtainium-1F2937?style=for-the-badge" alt="通过 Obtainium 获取更新"></a>
 </p>
 
 <p align="center">
-  <a href="https://github.com/papajon123/meshcentral-android/releases"><img src="https://img.shields.io/github/v/release/papajon123/meshcentral-android?include_prereleases&label=release" alt="最新发行版（含预发布）"></a>
+  <a href="https://github.com/papajon123/meshpilot-android/releases"><img src="https://img.shields.io/github/v/release/papajon123/meshpilot-android?include_prereleases&label=release" alt="最新发行版（含预发布）"></a>
   <img src="https://img.shields.io/badge/License-Apache_2.0-blue" alt="Apache 2.0 许可证">
   <img src="https://img.shields.io/badge/Android-8%2B%20%28API%2026%29-3DDC84" alt="Android 8 或更高版本，最低 API 26">
   <a href="https://boosty.to/papajon123"><img src="https://img.shields.io/badge/Boosty-support-F15F2C?logo=boosty&amp;logoColor=white" alt="在 Boosty 上支持 MeshPilot"></a>
@@ -56,13 +56,13 @@ MeshCentral 网页面板可以在手机浏览器中打开，但它是为大屏�
 这是一个处于公开预览阶段的小型独立项目。目前最有帮助的是：
 
 - **加入 Google Play 测试。** Google 要求 12 名测试者连续 14 天保留安装后应用才能公开发布；[加入方法](docs/PLAY_TESTING.md)只需两分钟，不需要服务器。
-- **在你的手机上试用**，并提交[设备报告](https://github.com/papajon123/meshcentral-android/issues/new?template=device_report.yml)：哪些功能可用，哪些不可用。特别欢迎真实手机和 Windows 代理的反馈。
-- **提问和分享想法**：请到 [Discussions](https://github.com/papajon123/meshcentral-android/discussions)。
-- **报告错误**：使用[错误报告表单](https://github.com/papajon123/meshcentral-android/issues/new?template=bug_report.yml)。请勿公开服务器地址、凭据或私人设备数据。
+- **在你的手机上试用**，并提交[设备报告](https://github.com/papajon123/meshpilot-android/issues/new?template=device_report.yml)：哪些功能可用，哪些不可用。特别欢迎真实手机和 Windows 代理的反馈。
+- **提问和分享想法**：请到 [Discussions](https://github.com/papajon123/meshpilot-android/discussions)。
+- **报告错误**：使用[错误报告表单](https://github.com/papajon123/meshpilot-android/issues/new?template=bug_report.yml)。请勿公开服务器地址、凭据或私人设备数据。
 
 ## 快速开始
 
-1. **安装应用。** 从 [GitHub Releases](https://github.com/papajon123/meshcentral-android/releases) 下载[已签名 APK](https://github.com/papajon123/meshcentral-android/releases)。需要 Android 8.0（API 26）或更高版本。经你同意后，应用每天检查一次 GitHub 更新，并在浏览器中打开下载页面。
+1. **安装应用。** 从 [GitHub Releases](https://github.com/papajon123/meshpilot-android/releases) 下载[已签名 APK](https://github.com/papajon123/meshpilot-android/releases)。需要 Android 8.0（API 26）或更高版本。经你同意后，应用每天检查一次 GitHub 更新，并在浏览器中打开下载页面。
 2. **保持签名一致。** Android 只接受包名相同、签名密钥相同且 `versionCode` 更高的更新。
 3. **连接你自己的服务器。** 输入 MeshCentral 服务器的完整 HTTPS 地址，例如 `https://meshcentral.example.com/`，然后使用 MeshCentral 账户登录。应用没有预置服务器或账户。不支持浏览器 SSO。使用终端前，请安装最新版 Android System WebView。
 
@@ -145,9 +145,9 @@ MeshCentral 网页面板可以在手机浏览器中打开，但它是为大屏�
 
 ## 安装和更新
 
-从 [GitHub Releases](https://github.com/papajon123/meshcentral-android/releases) 下载已签名 APK 并手动安装。更新需要相同的包名、相同的签名密钥和更高的 `versionCode`。早期非公开构建使用不同的包名；它们是独立应用，不共享数据或签名密钥。
+从 [GitHub Releases](https://github.com/papajon123/meshpilot-android/releases) 下载已签名 APK 并手动安装。更新需要相同的包名、相同的签名密钥和更高的 `versionCode`。早期非公开构建使用不同的包名；它们是独立应用，不共享数据或签名密钥。
 
-如需获得新版本通知，可将 `https://github.com/papajon123/meshcentral-android` 添加到 [Obtainium](https://github.com/ImranR98/Obtainium) 并开启 **Include prereleases**：当前所有构建均为公开预览版。
+如需获得新版本通知，可将 `https://github.com/papajon123/meshpilot-android` 添加到 [Obtainium](https://github.com/ImranR98/Obtainium) 并开启 **Include prereleases**：当前所有构建均为公开预览版。
 
 ## 隐私与安全
 

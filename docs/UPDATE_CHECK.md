@@ -65,7 +65,7 @@ Do not use a running personal emulator. Stop the dedicated emulator after testin
 4. On a build signed with the public identity and an older installed code, verify the candidate card
    and device-list banner. A debug APK is intentionally incompatible; do not bypass the signer check
    or copy production keys into a test build. Synthetic candidate UI fixtures can test rendering.
-5. **Download** opens exactly `https://github.com/papajon123/meshcentral-android/releases/tag/vX.Y.Z` in
+5. **Download** opens exactly `https://github.com/papajon123/meshpilot-android/releases/tag/vX.Y.Z` in
    a browser. With no browser, show the inline error. The app itself does not fetch the APK.
 6. **Later** and **Skip this version** hide both surfaces, persist across restarts, and remain effective
    if pressed while a new check is running. Later expires after a day; a newer code survives a skip.

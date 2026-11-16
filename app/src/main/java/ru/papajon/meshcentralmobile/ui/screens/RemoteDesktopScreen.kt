@@ -41,6 +41,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.systemBars
@@ -90,8 +91,11 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.boundsInWindow
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
@@ -108,6 +112,9 @@ import ru.papajon.meshcentralmobile.mesh.MeshCentralClient
 import ru.papajon.meshcentralmobile.mesh.MouseButton
 import ru.papajon.meshcentralmobile.mesh.RemoteDesktopState
 import ru.papajon.meshcentralmobile.mesh.RemoteViewport
+import ru.papajon.meshcentralmobile.mesh.ViewportInsets
+import ru.papajon.meshcentralmobile.mesh.ViewportRect
+import ru.papajon.meshcentralmobile.mesh.viewportInsets
 import ru.papajon.meshcentralmobile.mesh.SessionGestureAction
 import ru.papajon.meshcentralmobile.mesh.SessionGesturePolicy
 import ru.papajon.meshcentralmobile.mesh.TwoFingerAction
@@ -273,13 +280,70 @@ fun RemoteDesktopScreen(
         }
     }
 
+    // Panels own the top and bottom strips of the canvas. Measure them instead of assuming a
+    // size: the measured bounds already include the system bars that the panels pad for, so those
+    // insets are not subtracted a second time. The IME is combined with the dock by `max`, because
+    // the two occluders overlap rather than stack.
+    val density = LocalDensity.current
+    val windowHeight = LocalWindowInfo.current.containerSize.height.toFloat()
+    var rootBounds by remember { mutableStateOf<ViewportRect?>(null) }
+    var topBounds by remember { mutableStateOf<ViewportRect?>(null) }
+    var dockBounds by remember { mutableStateOf<ViewportRect?>(null) }
+    var collapsedDockBounds by remember { mutableStateOf<ViewportRect?>(null) }
+    val imeBottomPx = if (device.isAndroidAgent) 0f else WindowInsets.ime.getBottom(density).toFloat()
+    val dockShown = !device.isAndroidAgent && chromeVisible && dockVisible
+    val collapsedDockShown = !device.isAndroidAgent && chromeVisible && !dockVisible
+    val sessionInsets = remember(
+        rootBounds, topBounds, dockBounds, collapsedDockBounds, canvasSize,
+        imeBottomPx, windowHeight, dockShown, collapsedDockShown, device.isAndroidAgent,
+    ) {
+        val root = rootBounds
+        if (device.isAndroidAgent || root == null || canvasSize.width <= 0 || canvasSize.height <= 0) {
+            ViewportInsets()
+        } else {
+            val imeInCanvas = (imeBottomPx - (windowHeight - root.bottom)).coerceAtLeast(0f)
+            val bottomPanel = listOfNotNull(
+                dockBounds.takeIf { dockShown },
+                collapsedDockBounds.takeIf { collapsedDockShown },
+            ).map { it.translated(-root.left, -root.top) }.minByOrNull { it.top }
+            viewportInsets(
+                canvasWidth = canvasSize.width,
+                canvasHeight = canvasSize.height,
+                top = topBounds?.translated(-root.left, -root.top),
+                bottom = bottomPanel,
+                imeBottom = imeInCanvas,
+            )
+        }
+    }
+
     val debugDetails = if (debugVisible && ru.papajon.meshcentralmobile.BuildConfig.DEBUG)
-        sessionDebugText(canvasSize, desktopState, zoom, panX, panY, lastGesture) else null
+        sessionDebugText(canvasSize, desktopState, zoom, panX, panY, lastGesture, sessionInsets) else null
+
+    // Zoom buttons keep the remote pixel in the middle of the uncovered area instead of resetting
+    // the pan, so zooming out of a corner does not jump back to the letterbox.
+    fun zoomSessionTo(requestedZoom: Float) {
+        val viewport = RemoteViewport(
+            canvasWidth = canvasSize.width,
+            canvasHeight = canvasSize.height,
+            remoteWidth = desktopState.remoteWidth,
+            remoteHeight = desktopState.remoteHeight,
+            zoom = zoom,
+            panX = panX,
+            panY = panY,
+            fitWidth = device.supportsRemoteInput.not(),
+            insets = sessionInsets,
+        )
+        val result = viewport.zoomAtVisibleCentre(requestedZoom)
+        zoom = result.zoom
+        panX = result.panX
+        panY = result.panY
+    }
 
     Box(
         modifier = modifier
             .testTag(if (fullscreen) "remote-desktop-fullscreen" else "remote-desktop")
             .fillMaxSize()
+            .onGloballyPositioned { rootBounds = it.toViewportRect() }
             .background(MeshTheme.colors.canvas),
     ) {
         if (device.isAndroidAgent) {
@@ -327,6 +391,7 @@ fun RemoteDesktopScreen(
             onStylusUsed = stylusHint.onUse,
             twoFingerAction = twoFingerAction,
             pinchEnabled = pinchEnabled,
+            insets = sessionInsets,
         )
 
         if (!desktopState.hasFrame || desktopState.connectionState == ConnectionState.Reconnecting) {
@@ -343,7 +408,8 @@ fun RemoteDesktopScreen(
         if (!device.isAndroidAgent) Column(
             modifier = Modifier
                 .align(Alignment.TopCenter)
-                .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Top + WindowInsetsSides.Horizontal)),
+                .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Top + WindowInsetsSides.Horizontal))
+                .onGloballyPositioned { topBounds = it.toViewportRect() },
         ) {
             ru.papajon.meshcentralmobile.ui.screens.session.PhoneViewOnlyNotice(device, Modifier.padding(8.dp))
             AnimatedVisibility(
@@ -390,7 +456,9 @@ fun RemoteDesktopScreen(
                 slideInVertically(animationSpec = MeshTheme.motion.spatialDefault) { it / 2 },
             exit = fadeOut(animationSpec = MeshTheme.motion.effectFast) +
                 slideOutVertically(animationSpec = MeshTheme.motion.spatialFast) { it / 2 },
-            modifier = Modifier.align(Alignment.BottomCenter),
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .onGloballyPositioned { dockBounds = it.toViewportRect() },
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 SessionDock(
@@ -415,6 +483,7 @@ fun RemoteDesktopScreen(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .windowInsetsPadding(WindowInsets.systemBars)
+                    .onGloballyPositioned { collapsedDockBounds = it.toViewportRect() }
                     .padding(bottom = 6.dp),
             ) {
                 Icon(Icons.Outlined.ArrowDropUp, contentDescription = stringResource(R.string.session_dock_show))
@@ -488,15 +557,13 @@ fun RemoteDesktopScreen(
             fullscreen = fullscreen,
             zoom = zoom,
             onZoomIn = {
-                zoom = (zoom * 1.25f).coerceAtMost(RemoteViewport.MAX_ZOOM)
-                panX = 0f
-                panY = 0f
+                zoomSessionTo((zoom * 1.25f).coerceAtMost(RemoteViewport.MAX_ZOOM))
             },
             onZoomOut = {
-                zoom = (zoom / 1.25f).coerceAtLeast(1f)
-                if (zoom <= 1f) { panX = 0f; panY = 0f }
+                zoomSessionTo((zoom / 1.25f).coerceAtLeast(RemoteViewport.MIN_ZOOM))
             },
             onResetZoom = { zoom = 1f; panX = 0f; panY = 0f },
+            canResetViewport = zoom > 1f || panX != 0f || panY != 0f,
             debugVisible = debugVisible,
             onDebugVisibleChange = { debugVisible = it },
             onQuality = { quality, frames -> saveQuality(desktopState.quality.copy(jpegQuality = quality, frameRate = frames)) },
@@ -616,6 +683,7 @@ private fun sessionDebugText(
     panX: Float,
     panY: Float,
     lastGesture: String,
+    insets: ViewportInsets,
 ): String {
     val viewport = RemoteViewport(
         canvasWidth = canvasSize.width,
@@ -625,6 +693,7 @@ private fun sessionDebugText(
         zoom = zoom,
         panX = panX,
         panY = panY,
+        insets = insets,
     )
     return stringResource(
             R.string.session_debug_line,
@@ -887,6 +956,7 @@ internal fun SessionCanvas(
     onStylusUsed: () -> Unit = {},
     twoFingerAction: TwoFingerAction = TwoFingerAction.Default,
     pinchEnabled: Boolean = true,
+    insets: ViewportInsets = ViewportInsets(),
 ) {
     if (desktopState.device?.isAndroidAgent == true) {
         PhoneSessionCanvas(desktopState, zoom, panX, panY, onViewportChanged, onCanvasSizeChanged, inputSink, modifier,
@@ -912,8 +982,24 @@ internal fun SessionCanvas(
         panX = panX,
         panY = panY,
         fitWidth = desktopState.device?.supportsRemoteInput == false,
+        insets = insets,
     )
     val currentViewport by rememberUpdatedState(viewport)
+    var previousGeometry by remember(desktopState.device?.nodeId, desktopState.remoteWidth,
+        desktopState.remoteHeight) { mutableStateOf(viewport) }
+
+    // A keyboard or panel change moves the free area; in trackpad mode follow the cursor that was
+    // already on screen instead of leaving it under the new chrome.
+    LaunchedEffect(viewport.availableLeft, viewport.availableTop, viewport.availableWidth,
+        viewport.availableHeight, mode) {
+        val base = currentViewport
+        val (centerPanX, centerPanY) = base.panKeepingVisibleCentre(previousGeometry)
+        previousGeometry = base
+        val adjusted = base.copy(panX = centerPanX, panY = centerPanY)
+        val (nextPanX, nextPanY) = if (mode == RemoteControlMode.Trackpad && remoteCursor != Offset.Unspecified)
+            adjusted.panToRevealCursor(remoteCursor.x, remoteCursor.y) else centerPanX to centerPanY
+        if (nextPanX != base.panX || nextPanY != base.panY) onViewportChanged(base.zoom, nextPanX, nextPanY)
+    }
     fun trackpadPoint(): Offset {
         if (remoteCursor == Offset.Unspecified) return Offset(canvasSize.width / 2f, canvasSize.height / 2f)
         val point = currentViewport.toCanvas(remoteCursor.x.toInt(), remoteCursor.y.toInt())
@@ -1352,6 +1438,12 @@ private fun DrawScope.drawRemoteCursor(position: Offset) {
     }
     drawPath(path = path, color = Color.White)
     drawPath(path = path, color = Color(0xFF101418), style = Stroke(width = 1.6.dp.toPx()))
+}
+
+/** Measured panel bounds in the same root coordinate space as the session canvas. */
+private fun androidx.compose.ui.layout.LayoutCoordinates.toViewportRect(): ViewportRect {
+    val bounds = boundsInWindow()
+    return ViewportRect(bounds.left, bounds.top, bounds.right, bounds.bottom)
 }
 
 /** MeshCentral display id that means "the whole virtual desktop". */
