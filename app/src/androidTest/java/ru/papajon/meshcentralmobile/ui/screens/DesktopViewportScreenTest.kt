@@ -32,6 +32,9 @@ class DesktopViewportScreenTest {
     private lateinit var client: MeshCentralClient
     private val sink = DesktopRecordingSink()
     private val colors = listOf(0xffff0000.toInt(), 0xff00ff00.toInt(), 0xff0000ff.toInt(), 0xffffff00.toInt())
+    // At 320x640 mdpi the landscape fit is only ~60px tall. Markers must survive downsampling
+    // and the production 1dp framebuffer outline, rather than becoming subpixel colour samples.
+    private val markerSize = 64
 
     @Suppress("UNCHECKED_CAST")
     private fun screen(landscape: Boolean = false) {
@@ -42,7 +45,12 @@ class DesktopViewportScreenTest {
                 else android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
         compose.waitUntil(5000) { compose.activity.resources.configuration.orientation == orientation }
-        compose.runOnUiThread { WindowCompat.setDecorFitsSystemWindows(compose.activity.window, false) }
+        compose.runOnUiThread {
+            WindowCompat.setDecorFitsSystemWindows(compose.activity.window, false)
+            // Match MainActivity's manifest contract. With the unspecified default, API 26 pans
+            // this bare ComponentActivity to the hidden editor and moves the entire top bar offscreen.
+            compose.activity.window.setSoftInputMode(android.view.WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+        }
         client = MeshCentralClient(SecureVault(compose.activity, "viewport-screen-fixture"), scope)
         client.javaClass.getDeclaredField("remoteInputSink").apply { isAccessible = true }.set(client, sink)
         val relay = client.javaClass.getDeclaredField("relay").apply { isAccessible = true }.get(client)
@@ -52,9 +60,10 @@ class DesktopViewportScreenTest {
         val canvas = Canvas(frame)
         canvas.drawColor(android.graphics.Color.WHITE)
         val paint = Paint()
-        listOf(0 to 0, 376 to 0, 0 to 1576, 376 to 1576).forEachIndexed { i, (x, y) ->
+        listOf(0 to 0, (400 - markerSize) to 0, 0 to (1600 - markerSize),
+            (400 - markerSize) to (1600 - markerSize)).forEachIndexed { i, (x, y) ->
             paint.color = colors[i]
-            canvas.drawRect(x.toFloat(), y.toFloat(), x + 24f, y + 24f, paint)
+            canvas.drawRect(x.toFloat(), y.toFloat(), (x + markerSize).toFloat(), (y + markerSize).toFloat(), paint)
         }
         state.value = RemoteDesktopState(
             device = MeshDevice("node//viewport", "mesh//fixture", "Viewport fixture", conn = 1, agentId = 3, rights = 8),
@@ -115,8 +124,8 @@ class DesktopViewportScreenTest {
             compose.runOnIdle {
                 assertEquals("corner $i did not reach remote input", 1, sink.clickPositions.size)
                 val (x, y) = sink.clickPositions.single()
-                assertTrue("corner $i mapped to $x,$y", x in (if (i % 2 == 0) 0..24 else 375..399) &&
-                    y in (if (i < 2) 0..24 else 1575..1599))
+                assertTrue("corner $i mapped to $x,$y", x in (if (i % 2 == 0) 0..markerSize else (399 - markerSize)..399) &&
+                    y in (if (i < 2) 0..markerSize else (1599 - markerSize)..1599))
             }
         }
     }
@@ -166,6 +175,7 @@ class DesktopViewportScreenTest {
         }
         compose.mainClock.advanceTimeBy(1000)
         compose.waitForIdle()
+        compose.onNodeWithTag("session-top-bar").assertIsDisplayed()
         assertCornersReachable()
     }
 }
