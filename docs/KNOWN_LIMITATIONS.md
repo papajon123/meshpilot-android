@@ -147,7 +147,7 @@ Physical-phone acceptance, Windows/systemd service mutations, TalkBack, OEM back
 - GitHub Releases is the public distribution channel. There is no official F-Droid package, and inclusion in the official F-Droid catalogue is not promised.
 - Google Play closed testing is active ([how to join](PLAY_TESTING.md)); there is no public store release yet. The app has no in-app installer. Android accepts an update only with the same package name and signing key and a higher `versionCode`.
 - The public package/signing identity is unchanged; earlier private builds use a distinct package and remain separate applications.
-- GitLab CI runs the development checks and publishes release snapshots to GitHub; GitHub Actions builds, tests on emulators and signs the released APK and Play bundle.
+- GitHub Actions runs the development checks, builds and tests on emulators, and signs the released APK and Play bundle. GitLab only keeps automatic reserve copies of the repositories and does not build or publish releases.
 
 ## Network and deployment
 

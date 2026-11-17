@@ -2,6 +2,7 @@ package ru.papajon.meshcentralmobile.mesh
 
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
@@ -159,5 +160,199 @@ class RemoteViewportTest {
         assertTrue(viewport.hitsImage(540f, viewport.top + viewport.drawnHeight - 10f))
         assertFalse(viewport.hitsImage(540f, viewport.top - 40f))
         assertFalse(viewport.hitsImage(540f, viewport.top + viewport.drawnHeight + 40f))
+    }
+
+    // Issue #19 regression: the top bar and dock cover the framebuffer. Fit must use the
+    // uncovered rectangle, otherwise the bottom edge of a fitted desktop is behind the dock.
+    @Test
+    fun fitKeepsTheWholeFramebufferBetweenTheTopBarAndDock() {
+        val viewport = RemoteViewport(
+            canvasWidth = 1000,
+            canvasHeight = 1000,
+            remoteWidth = 1000,
+            remoteHeight = 1000,
+            insets = ViewportInsets(top = 180f, bottom = 240f),
+        )
+
+        assertEquals(580f / 1000f, viewport.fitScale, 0.0001f)
+        assertEquals(180f, viewport.availableTop, 0.01f)
+        assertEquals(760f, viewport.availableBottom, 0.01f)
+        assertEquals(180f, viewport.top, 0.01f)
+
+        val (_, topEdge) = viewport.toCanvas(0, 0)
+        val (_, bottomEdge) = viewport.toCanvas(0, 999)
+        assertTrue("top edge $topEdge is under the top bar", topEdge >= viewport.availableTop - 0.01f)
+        assertTrue("bottom edge $bottomEdge is under the dock", bottomEdge <= viewport.availableBottom + 0.01f)
+
+        // The old full-canvas fit really did park the bottom edge behind the dock.
+        val fullCanvas = RemoteViewport(1000, 1000, 1000, 1000)
+        assertTrue(fullCanvas.toCanvas(0, 999).second > viewport.availableBottom)
+    }
+
+    @Test
+    fun tapsOnPanelsAreRejectedEvenWhenTheImageIsUnderneath() {
+        val viewport = RemoteViewport(
+            canvasWidth = 1000,
+            canvasHeight = 1000,
+            remoteWidth = 1000,
+            remoteHeight = 1000,
+            zoom = 2f,
+            panY = 400f,
+            insets = ViewportInsets(top = 200f, bottom = 200f),
+        )
+
+        assertFalse("top bar must not click the covered desktop", viewport.hitsImage(500f, 100f))
+        assertFalse("dock must not click the covered desktop", viewport.hitsImage(500f, 900f))
+        assertFalse(viewport.hitsAvailable(500f, 900f))
+        assertTrue(viewport.hitsImage(500f, 500f))
+    }
+
+    @Test
+    fun anyCornerCanBeBroughtIntoTheUncoveredArea() {
+        val insets = ViewportInsets(top = 120f, bottom = 160f)
+        val canvases = listOf(1000 to 700, 700 to 1000) // landscape and portrait
+        for ((canvasWidth, canvasHeight) in canvases) {
+            for (zoom in listOf(1f, 16f)) {
+                val base = RemoteViewport(
+                    canvasWidth = canvasWidth,
+                    canvasHeight = canvasHeight,
+                    remoteWidth = 1920,
+                    remoteHeight = 1080,
+                    zoom = zoom,
+                    insets = insets,
+                )
+                val corners = listOf(
+                    intArrayOf(0, 0, 10_000, 10_000),
+                    intArrayOf(1919, 0, -10_000, 10_000),
+                    intArrayOf(0, 1079, 10_000, -10_000),
+                    intArrayOf(1919, 1079, -10_000, -10_000),
+                )
+                for (corner in corners) {
+                    val clamped = base.clampPan(corner[2].toFloat(), corner[3].toFloat())
+                    val view = base.copy(panX = clamped.first, panY = clamped.second)
+                    val (x, y) = view.toCanvas(corner[0], corner[1])
+                    val label = "canvas ${canvasWidth}x$canvasHeight zoom $zoom corner ${corner[0]},${corner[1]}"
+                    assertTrue("$label x=$x outside ${view.availableLeft}..${view.availableRight}",
+                        x >= view.availableLeft - 0.5f && x <= view.availableRight + 0.5f)
+                    assertTrue("$label y=$y outside ${view.availableTop}..${view.availableBottom}",
+                        y >= view.availableTop - 0.5f && y <= view.availableBottom + 0.5f)
+                    assertEquals(corner[0] to corner[1], view.toRemote(x, y))
+                }
+            }
+        }
+    }
+
+    @Test
+    fun changingTheAvailableAreaKeepsTheWorkingPointAndZoom() {
+        val base = RemoteViewport(
+            canvasWidth = 1000,
+            canvasHeight = 1000,
+            remoteWidth = 1920,
+            remoteHeight = 1080,
+            zoom = 2.5f,
+            panX = 120f,
+            panY = -80f,
+        )
+        val before = base.toRemote(
+            base.availableLeft + base.availableWidth / 2f,
+            base.availableTop + base.availableHeight / 2f,
+        )
+
+        val withKeyboard = base.copy(insets = ViewportInsets(top = 180f, bottom = 260f))
+        val after = withKeyboard.toRemote(
+            withKeyboard.availableLeft + withKeyboard.availableWidth / 2f,
+            withKeyboard.availableTop + withKeyboard.availableHeight / 2f,
+        )
+
+        assertEquals(base.zoom, withKeyboard.zoom, 0f)
+        assertEquals(before.first.toFloat(), after.first.toFloat(), 1f)
+        assertEquals(before.second.toFloat(), after.second.toFloat(), 1f)
+    }
+
+    @Test
+    fun trackpadFollowsTheCursorOutFromUnderTheKeyboard() {
+        val base = RemoteViewport(
+            canvasWidth = 1000,
+            canvasHeight = 1000,
+            remoteWidth = 1920,
+            remoteHeight = 1080,
+            zoom = 4f,
+        )
+        val cursorX = 1919f
+        val cursorY = 1079f
+        val keyboard = base.copy(insets = ViewportInsets(bottom = 400f))
+
+        val (panX, panY) = keyboard.panToRevealCursor(cursorX, cursorY)
+        val revealed = keyboard.copy(panX = panX, panY = panY)
+        val (x, y) = revealed.toCanvas(cursorX.toInt(), cursorY.toInt())
+
+        assertTrue("cursor x=$x is under the keyboard", revealed.hitsImage(x, y))
+        assertTrue("cursor y=$y is under the keyboard", y <= revealed.availableBottom)
+        assertNotEquals(base.panY, panY, 0f)
+    }
+
+    @Test
+    fun zeroAndOversizedInsetsStayFiniteAndClickableAreaIsEmpty() {
+        val missing = RemoteViewport(0, 0, 0, 0, insets = ViewportInsets(top = 100f, bottom = 100f))
+        assertTrue(missing.fitScale.isFinite())
+        assertFalse(missing.hitsImage(0f, 0f))
+
+        val covered = RemoteViewport(
+            canvasWidth = 1000,
+            canvasHeight = 1000,
+            remoteWidth = 1920,
+            remoteHeight = 1080,
+            insets = ViewportInsets(left = 2000f, top = 2000f, right = -5f, bottom = 5000f),
+        )
+        assertEquals(0f, covered.availableWidth, 0f)
+        assertEquals(0f, covered.availableHeight, 0f)
+        assertFalse(covered.hitsAvailable(500f, 500f))
+        assertFalse(covered.hitsImage(500f, 500f))
+        assertTrue(covered.fitScale.isFinite())
+        assertTrue(covered.scale.isFinite())
+    }
+
+    @Test
+    fun measuredInsetsUsePanelBoundsAndDoNotDoubleCountTheKeyboard() {
+        val insets = viewportInsets(
+            canvasWidth = 1000,
+            canvasHeight = 800,
+            top = ViewportRect(-10f, -20f, 1010f, 120f),
+            bottom = ViewportRect(0f, 600f, 1000f, 800f),
+            imeBottom = 350f,
+        )
+
+        assertEquals(120f, insets.top, 0.01f)
+        // Dock occlusion is 200 and the keyboard is 350; they overlap, so the answer is not 550.
+        assertEquals(350f, insets.bottom, 0.01f)
+
+        val oversized = viewportInsets(
+            canvasWidth = 100,
+            canvasHeight = 100,
+            bottom = ViewportRect(0f, 40f, 100f, 100f),
+            imeBottom = 500f,
+        )
+        assertEquals(100f, oversized.bottom, 0.01f)
+
+        val empty = viewportInsets(0, 0, top = ViewportRect(0f, 0f, 10f, 10f), imeBottom = 10f)
+        assertEquals(ViewportInsets(), empty)
+    }
+
+    @Test
+    fun topPanelMeasuredInsideSystemPaddingReservesThroughItsBottom() {
+        val insets = viewportInsets(400, 800, top = ViewportRect(12f, 30f, 388f, 150f))
+        assertEquals(150f, insets.top, 0f)
+    }
+
+    @Test
+    fun heightLimitedFitKeepsWorkingPixelWhenKeyboardChangesScale() {
+        val before = RemoteViewport(800, 1000, 400, 1600, zoom = 3f, panX = 75f, panY = -150f)
+        val keyboard = before.copy(insets = ViewportInsets(top = 150f, bottom = 400f))
+        assertNotEquals(before.fitScale, keyboard.fitScale, 0f)
+        val pan = keyboard.panKeepingVisibleCentre(before)
+        val after = keyboard.copy(panX = pan.first, panY = pan.second)
+        assertEquals(before.zoom, after.zoom, 0f)
+        assertEquals(before.toRemote(400f, 500f),
+            after.toRemote(after.availableLeft + after.availableWidth / 2f, after.availableTop + after.availableHeight / 2f))
     }
 }

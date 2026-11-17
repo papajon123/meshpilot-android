@@ -16,7 +16,7 @@ Both candidate builds, JVM tests and lint passed. PhoneUiTest, DeviceInfoExportT
 
 ## 0.7.3
 
-[#10](https://github.com/papajon123/meshcentral-android/issues/10): on a server that requires a
+[#10](https://github.com/papajon123/meshpilot-android/issues/10): on a server that requires a
 second factor, sign-in showed the verification-code step, but the button stayed in "Signing in…" and
 the screen kept refreshing with "Connection to the server was lost". MeshCentral answers a password-only `x-meshauth` header with a `tokenrequired`
 close message and `ws.close()`, an empty close frame. OkHttp reports it as 1005; the client echoed
@@ -139,9 +139,10 @@ The three READMEs were rendered with GitHub's Markdown API and passed **48 brows
 1366, 390 and 320 pixel widths, with no reported serious accessibility, reflow or console violations.
 The visual sheets were inspected. This verifies the local preview of GitHub-rendered Markdown;
 dynamic badges reflect their external providers and can be cached.
-Release-snapshot tests use local Git repositories to verify that private development history is
-not transferred and that conflicting tags and invalid source trees are rejected. See
-[the delivery guide](GITLAB_RELEASES.md) for the enforced release boundaries.
+The 0.5.2 release-snapshot tests (historical; that bridge is retired) used local Git repositories
+to verify that private development history was not transferred and that conflicting tags and
+invalid source trees were rejected. See [the GitLab reserve notes](GITLAB_RELEASES.md) for the
+current repository roles.
 
 ## Earlier readability and product review — 2026-10-21
 

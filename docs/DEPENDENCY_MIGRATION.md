@@ -18,7 +18,7 @@ Status: merged to `main` and shipped in 0.10.0 (AGP 9.5.0, Gradle 9.8.2, OkHttp 
   changes, version/versionCode bumps, feedback and Play features.
 - The remote keyboard map option in `SessionSheets`; navigation/auth/consent changes in
   `MeshCentralApp`.
-- Release scripts and GitHub workflows outside `android-setup`; GitLab checks only receive SDK/cache updates.
+- Release scripts and GitHub workflows outside `android-setup`; the automatic GitLab reserve only receives SDK/cache updates.
 
 ## Source compatibility adjustments
 
@@ -41,8 +41,9 @@ Status: merged to `main` and shipped in 0.10.0 (AGP 9.5.0, Gradle 9.8.2, OkHttp 
 - JDK 17, Android SDK platform 37.0, build-tools 36.0.0 (35.0.0 kept for APK verification):
   `./gradlew testDebugUnitTest lintDebug assembleDebug compileDebugAndroidTestKotlin`.
 - `connectedDebugAndroidTest` on a dedicated emulator for the UI/test-tag changes.
-- CI: GitHub `android-setup` installs platform 37.0 and build-tools 36.0.0 plus 35.0.0; GitLab
-  installs 37.0/36.0.0 and uses the `android-37` cache keys while keeping the existing commands.
+- CI: GitHub `android-setup` installs platform 37.0 and build-tools 36.0.0 plus 35.0.0; the
+  automatic GitLab reserve installs 37.0/36.0.0 and uses the `android-37` cache keys while
+  keeping the existing commands.
 
 Local command: testDebugUnitTest lintDebug assembleDebug assembleDebugAndroidTest. Exit 0;
 881 unit tests, 0 failures, 0 errors, 1 skipped. Lint and both APK builds succeeded.

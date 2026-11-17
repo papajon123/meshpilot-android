@@ -5,12 +5,12 @@
 <p align="center"><strong>Reach the computers on your own MeshCentral server from an Android phone or tablet:<br>remote desktop, terminal, files, chat with the user, SSH, SFTP and port forwarding.</strong></p>
 
 <p align="center">
-  <a href="https://github.com/papajon123/meshcentral-android/releases/latest"><img src="https://img.shields.io/badge/Download-APK-4FC3F7?style=for-the-badge&amp;logo=android&amp;logoColor=white" alt="Download the signed APK"></a>
+  <a href="https://github.com/papajon123/meshpilot-android/releases/latest"><img src="https://img.shields.io/badge/Download-APK-4FC3F7?style=for-the-badge&amp;logo=android&amp;logoColor=white" alt="Download the signed APK"></a>
   <a href="https://github.com/ImranR98/Obtainium"><img src="https://img.shields.io/badge/Updates-Obtainium-1F2937?style=for-the-badge" alt="Get updates with Obtainium"></a>
 </p>
 
 <p align="center">
-  <a href="https://github.com/papajon123/meshcentral-android/releases"><img src="https://img.shields.io/github/v/release/papajon123/meshcentral-android?include_prereleases&amp;label=release" alt="Latest release, including pre-releases"></a>
+  <a href="https://github.com/papajon123/meshpilot-android/releases"><img src="https://img.shields.io/github/v/release/papajon123/meshpilot-android?include_prereleases&amp;label=release" alt="Latest release, including pre-releases"></a>
   <img src="https://img.shields.io/badge/License-Apache_2.0-blue" alt="Apache License 2.0">
   <img src="https://img.shields.io/badge/Android-8%2B%20%28API%2026%29-3DDC84" alt="Android 8 or newer, API 26 minimum">
   <img src="https://img.shields.io/badge/23-locales-4B5563" alt="23 Android locale variants">
@@ -18,7 +18,7 @@
 </p>
 
 > [!NOTE]
-> **MeshPilot is an independent, third-party app** (formerly “MeshCentral Mobile”). It is not affiliated with, endorsed by or supported by the MeshCentral project or its developers. Please report problems with this app in [this repository's issues](https://github.com/papajon123/meshcentral-android/issues), not to the MeshCentral team.
+> **MeshPilot is an independent, third-party app** (formerly “MeshCentral Mobile”). It is not affiliated with, endorsed by or supported by the MeshCentral project or its developers. Please report problems with this app in [this repository's issues](https://github.com/papajon123/meshpilot-android/issues), not to the MeshCentral team.
 
 ## Screenshots
 
@@ -86,13 +86,13 @@ The MeshCentral web panel opens in a mobile browser, but it is designed for a de
 This is a small independent project in public preview. The most useful help right now:
 
 - **Join the Google Play test.** Google needs 12 testers who keep the app installed for 14 days before it can go public; [how to join](docs/PLAY_TESTING.md) takes two minutes and needs no server.
-- **Try it on your phone** and leave a [device report](https://github.com/papajon123/meshcentral-android/issues/new?template=device_report.yml): what works and what does not. Real phones and Windows agents are especially welcome.
-- **Ask questions and share ideas** in [Discussions](https://github.com/papajon123/meshcentral-android/discussions).
-- **Report bugs** with the [bug report form](https://github.com/papajon123/meshcentral-android/issues/new?template=bug_report.yml). Never post server addresses, credentials or private device data.
+- **Try it on your phone** and leave a [device report](https://github.com/papajon123/meshpilot-android/issues/new?template=device_report.yml): what works and what does not. Real phones and Windows agents are especially welcome.
+- **Ask questions and share ideas** in [Discussions](https://github.com/papajon123/meshpilot-android/discussions).
+- **Report bugs** with the [bug report form](https://github.com/papajon123/meshpilot-android/issues/new?template=bug_report.yml). Never post server addresses, credentials or private device data.
 
 ## Quick start
 
-1. **Install the app.** Download the [signed APK](https://github.com/papajon123/meshcentral-android/releases). Android 8.0 (API 26) or newer is required. With your consent, the app checks GitHub for updates once a day; downloads open in your browser.
+1. **Install the app.** Download the [signed APK](https://github.com/papajon123/meshpilot-android/releases). Android 8.0 (API 26) or newer is required. With your consent, the app checks GitHub for updates once a day; downloads open in your browser.
 2. **Keep the same signer.** Android accepts an update only with the same package name, the same signing key and a higher `versionCode`.
 3. **Connect your own server.** Enter the full HTTPS URL of your MeshCentral server, for example `https://meshcentral.example.com/`, then sign in with a MeshCentral account. No server or account is preconfigured. Browser SSO is not supported. For the terminal, install a current Android System WebView.
 
@@ -173,7 +173,7 @@ Jobs, service/process views, confirmed service actions and background notificati
 
 ## How this app is built
 
-Most code, tests and docs are written by AI coding agents (Claude Code and OpenAI Codex) under the maintainer's direction. The maintainer personally reviews every change: reads the code and the architecture in the merge request and checks the behaviour before it ships. The [AI policy](AI_POLICY.md) describes the automated checks and the rules for AI-assisted contributions.
+Most code, tests and docs are written by AI coding agents (Claude Code and OpenAI Codex) under the maintainer's direction. The maintainer reviews every change: the code and the architecture in the pull request and the behaviour before it ships. An authorized agent may merge after an independent review and green checks, then sign and publish on the maintainer's behalf. The [AI policy](AI_POLICY.md) describes the automated checks and the rules for AI-assisted contributions.
 
 ## Languages
 
@@ -184,9 +184,9 @@ Most code, tests and docs are written by AI coding agents (Claude Code and OpenA
 
 ## Install and update
 
-Download the signed APK from [GitHub Releases](https://github.com/papajon123/meshcentral-android/releases) and install it manually. Updates require the same package name, the same signing key and a higher `versionCode`. Earlier private builds use a different package name; they are separate applications and do not share data or signing keys.
+Download the signed APK from [GitHub Releases](https://github.com/papajon123/meshpilot-android/releases) and install it manually. Updates require the same package name, the same signing key and a higher `versionCode`. Earlier private builds use a different package name; they are separate applications and do not share data or signing keys.
 
-To be notified about new versions, add `https://github.com/papajon123/meshcentral-android` to [Obtainium](https://github.com/ImranR98/Obtainium) and turn on **Include prereleases**: all current builds are public previews.
+To be notified about new versions, add `https://github.com/papajon123/meshpilot-android` to [Obtainium](https://github.com/ImranR98/Obtainium) and turn on **Include prereleases**: all current builds are public previews.
 
 ## Privacy and security
 
@@ -219,7 +219,7 @@ export ANDROID_HOME="$HOME/Android/Sdk"
 python3 ci/check_translations.py
 ```
 
-On Windows use `.\gradlew.bat` and set the same environment variables. Direct-distribution and Google Play debug APKs are written under `app/build/outputs/apk/direct/debug/` and `app/build/outputs/apk/play/debug/`. The Play bundle is `app/build/outputs/bundle/playRelease/app-play-release.aab`. The Play variant disables external update checks and the support link. A locally built artifact is not a published release; the maintainer reviews signing and publication.
+On Windows use `.\gradlew.bat` and set the same environment variables. Direct-distribution and Google Play debug APKs are written under `app/build/outputs/apk/direct/debug/` and `app/build/outputs/apk/play/debug/`. The Play bundle is `app/build/outputs/bundle/playRelease/app-play-release.aab`. The Play variant disables external update checks and the support link. A locally built artifact is not a published release; signing and publication remain separate reviewed release steps.
 
 </details>
 

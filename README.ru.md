@@ -5,15 +5,15 @@
 <p align="center"><strong>Независимый Android-клиент для вашего сервера MeshCentral: компьютеры, рабочий стол, терминал, файлы, SSH и SFTP с телефона или планшета.</strong></p>
 
 > [!NOTE]
-> **MeshPilot — независимое стороннее приложение** (раньше называлось «MeshCentral Mobile»). Оно не связано с проектом MeshCentral и его разработчиками, не одобрено и не поддерживается ими. О проблемах с приложением сообщайте в [вопросах этого репозитория](https://github.com/papajon123/meshcentral-android/issues), а не команде MeshCentral.
+> **MeshPilot — независимое стороннее приложение** (раньше называлось «MeshCentral Mobile»). Оно не связано с проектом MeshCentral и его разработчиками, не одобрено и не поддерживается ими. О проблемах с приложением сообщайте в [вопросах этого репозитория](https://github.com/papajon123/meshpilot-android/issues), а не команде MeshCentral.
 
 <p align="center">
-  <a href="https://github.com/papajon123/meshcentral-android/releases/latest"><img src="https://img.shields.io/badge/%D0%A1%D0%BA%D0%B0%D1%87%D0%B0%D1%82%D1%8C-APK-4FC3F7?style=for-the-badge&amp;logo=android&amp;logoColor=white" alt="Скачать подписанный APK"></a>
+  <a href="https://github.com/papajon123/meshpilot-android/releases/latest"><img src="https://img.shields.io/badge/%D0%A1%D0%BA%D0%B0%D1%87%D0%B0%D1%82%D1%8C-APK-4FC3F7?style=for-the-badge&amp;logo=android&amp;logoColor=white" alt="Скачать подписанный APK"></a>
   <a href="https://github.com/ImranR98/Obtainium"><img src="https://img.shields.io/badge/%D0%9E%D0%B1%D0%BD%D0%BE%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D1%8F-Obtainium-1F2937?style=for-the-badge" alt="Получать обновления через Obtainium"></a>
 </p>
 
 <p align="center">
-  <a href="https://github.com/papajon123/meshcentral-android/releases"><img src="https://img.shields.io/github/v/release/papajon123/meshcentral-android?include_prereleases&label=release" alt="Последний выпуск, включая предварительные"></a>
+  <a href="https://github.com/papajon123/meshpilot-android/releases"><img src="https://img.shields.io/github/v/release/papajon123/meshpilot-android?include_prereleases&label=release" alt="Последний выпуск, включая предварительные"></a>
   <img src="https://img.shields.io/badge/License-Apache_2.0-blue" alt="Лицензия Apache 2.0">
   <img src="https://img.shields.io/badge/Android-8%2B%20%28API%2026%29-3DDC84" alt="Android 8 или новее, минимум API 26">
   <a href="https://boosty.to/papajon123"><img src="https://img.shields.io/badge/Boosty-support-F15F2C?logo=boosty&amp;logoColor=white" alt="Поддержать MeshPilot на Boosty"></a>
@@ -56,13 +56,13 @@
 Это небольшой независимый проект в публичной предварительной версии. Больше всего сейчас помогут:
 
 - **Тестирование в Google Play.** Чтобы приложение стало публичным, Google нужны 12 тестировщиков, которые 14 дней держат его установленным; [как вступить](docs/PLAY_TESTING.ru.md) — пара минут, сервер не нужен.
-- **Проверка на вашем телефоне** — оставьте [отчёт об устройстве](https://github.com/papajon123/meshcentral-android/issues/new?template=device_report.yml): что работает, а что нет. Особенно ценны реальные телефоны и агенты Windows.
-- **Вопросы и идеи** — в [обсуждениях](https://github.com/papajon123/meshcentral-android/discussions).
-- **Ошибки** — через [форму отчёта об ошибке](https://github.com/papajon123/meshcentral-android/issues/new?template=bug_report.yml). Не публикуйте адреса серверов, учётные данные и сведения о своих устройствах.
+- **Проверка на вашем телефоне** — оставьте [отчёт об устройстве](https://github.com/papajon123/meshpilot-android/issues/new?template=device_report.yml): что работает, а что нет. Особенно ценны реальные телефоны и агенты Windows.
+- **Вопросы и идеи** — в [обсуждениях](https://github.com/papajon123/meshpilot-android/discussions).
+- **Ошибки** — через [форму отчёта об ошибке](https://github.com/papajon123/meshpilot-android/issues/new?template=bug_report.yml). Не публикуйте адреса серверов, учётные данные и сведения о своих устройствах.
 
 ## Быстрый старт
 
-1. **Установите приложение.** Скачайте [подписанный APK](https://github.com/papajon123/meshcentral-android/releases). Нужен Android 8.0 (API 26) или новее. С вашего согласия приложение раз в сутки проверяет обновления на GitHub; загрузка открывается в браузере.
+1. **Установите приложение.** Скачайте [подписанный APK](https://github.com/papajon123/meshpilot-android/releases). Нужен Android 8.0 (API 26) или новее. С вашего согласия приложение раз в сутки проверяет обновления на GitHub; загрузка открывается в браузере.
 2. **Сохраните подпись.** Android примет обновление только с тем же именем пакета, тем же ключом подписи и большим `versionCode`.
 3. **Подключите свой сервер.** Введите полный HTTPS-адрес вашего MeshCentral, например `https://meshcentral.example.com/`, и войдите с учётной записью MeshCentral. Сервер и учётная запись не предустановлены. Браузерный SSO не поддерживается. Для терминала установите актуальный Android System WebView.
 
@@ -146,9 +146,9 @@
 
 ## Установка и обновление
 
-Скачайте подписанный APK со страницы [GitHub Releases](https://github.com/papajon123/meshcentral-android/releases) и установите вручную. Для обновления нужны то же имя пакета, тот же ключ подписи и больший `versionCode`. Ранние приватные сборки используют другое имя пакета; это отдельные приложения, они не делят данные и ключ подписи.
+Скачайте подписанный APK со страницы [GitHub Releases](https://github.com/papajon123/meshpilot-android/releases) и установите вручную. Для обновления нужны то же имя пакета, тот же ключ подписи и больший `versionCode`. Ранние приватные сборки используют другое имя пакета; это отдельные приложения, они не делят данные и ключ подписи.
 
-Чтобы узнавать о новых версиях, добавьте `https://github.com/papajon123/meshcentral-android` в [Obtainium](https://github.com/ImranR98/Obtainium) и включите **Include prereleases**: все текущие сборки — предварительные.
+Чтобы узнавать о новых версиях, добавьте `https://github.com/papajon123/meshpilot-android` в [Obtainium](https://github.com/ImranR98/Obtainium) и включите **Include prereleases**: все текущие сборки — предварительные.
 
 ## Приватность и безопасность
 

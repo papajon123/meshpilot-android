@@ -633,6 +633,7 @@ fun SessionOptionsSheet(
     onHardwareKeyboardCaptured: (Boolean) -> Unit = {},
     useRemoteKeyboardMap: Boolean = false,
     onUseRemoteKeyboardMap: (Boolean) -> Unit = {},
+    canResetViewport: Boolean = zoom > 1f,
 ) {
     var quality by remember(state.quality) { mutableStateOf(state.quality.jpegQuality.toFloat()) }
     var frameRate by remember(state.quality) { mutableStateOf(state.quality.frameRate.toFloat()) }
@@ -657,7 +658,7 @@ fun SessionOptionsSheet(
                 OutlinedButton(onClick = onZoomIn, enabled = zoom < RemoteViewport.MAX_ZOOM, shape = PillShape) {
                     Icon(Icons.Outlined.ZoomIn, contentDescription = stringResource(R.string.session_zoom_in))
                 }
-                OutlinedButton(onClick = onResetZoom, enabled = zoom > 1f, shape = PillShape) {
+                OutlinedButton(onClick = onResetZoom, enabled = canResetViewport, shape = PillShape) {
                     Icon(Icons.Outlined.FitScreen, contentDescription = stringResource(R.string.common_action_fit_to_screen))
                 }
             }
