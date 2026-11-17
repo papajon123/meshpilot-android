@@ -32,12 +32,15 @@ class DesktopViewportScreenTest {
     private lateinit var client: MeshCentralClient
     private val sink = DesktopRecordingSink()
     private val colors = listOf(0xffff0000.toInt(), 0xff00ff00.toInt(), 0xff0000ff.toInt(), 0xffffff00.toInt())
-    // At 320x640 mdpi the landscape fit is only ~60px tall. Markers must survive downsampling
-    // and the production 1dp framebuffer outline, rather than becoming subpixel colour samples.
+    // Keep a pure source-colour interior after scaling and the production 1dp framebuffer outline.
     private val markerSize = 64
+    private var fixtureWidth = 400
+    private var fixtureHeight = 1600
 
     @Suppress("UNCHECKED_CAST")
-    private fun screen(landscape: Boolean = false) {
+    private fun screen(landscape: Boolean = false, frameWidth: Int = 400, frameHeight: Int = 1600) {
+        fixtureWidth = frameWidth
+        fixtureHeight = frameHeight
         val orientation = if (landscape) android.content.res.Configuration.ORIENTATION_LANDSCAPE
             else android.content.res.Configuration.ORIENTATION_PORTRAIT
         compose.runOnUiThread {
@@ -56,19 +59,19 @@ class DesktopViewportScreenTest {
         val relay = client.javaClass.getDeclaredField("relay").apply { isAccessible = true }.get(client)
         val state = relay.javaClass.getDeclaredField("_desktopState").apply { isAccessible = true }
             .get(relay) as MutableStateFlow<RemoteDesktopState>
-        val frame = Bitmap.createBitmap(400, 1600, Bitmap.Config.ARGB_8888)
+        val frame = Bitmap.createBitmap(fixtureWidth, fixtureHeight, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(frame)
         canvas.drawColor(android.graphics.Color.WHITE)
         val paint = Paint()
-        listOf(0 to 0, (400 - markerSize) to 0, 0 to (1600 - markerSize),
-            (400 - markerSize) to (1600 - markerSize)).forEachIndexed { i, (x, y) ->
+        listOf(0 to 0, (fixtureWidth - markerSize) to 0, 0 to (fixtureHeight - markerSize),
+            (fixtureWidth - markerSize) to (fixtureHeight - markerSize)).forEachIndexed { i, (x, y) ->
             paint.color = colors[i]
             canvas.drawRect(x.toFloat(), y.toFloat(), (x + markerSize).toFloat(), (y + markerSize).toFloat(), paint)
         }
         state.value = RemoteDesktopState(
             device = MeshDevice("node//viewport", "mesh//fixture", "Viewport fixture", conn = 1, agentId = 3, rights = 8),
             connectionState = ConnectionState.Connected, handshakeComplete = true,
-            framebuffer = frame, remoteWidth = 400, remoteHeight = 1600,
+            framebuffer = frame, remoteWidth = fixtureWidth, remoteHeight = fixtureHeight,
         )
         compose.setContent { MeshCentralMobileTheme {
             // The session is deliberately not at root (as in a host with consumed system insets).
@@ -110,7 +113,9 @@ class DesktopViewportScreenTest {
                     left = minOf(left, x); right = maxOf(right, x); first = minOf(first, y); last = maxOf(last, y)
                 }
             }
-            assertTrue("Framebuffer corner $color is obscured by chrome", right >= left && last >= first)
+            assertTrue("Framebuffer corner $color is obscured by chrome; canvas=${pixels.width}x${pixels.height}, " +
+                "root=$rootBounds, topPanelBottom=$top, dockTop=$bottom, " +
+                "frame=${fixtureWidth}x${fixtureHeight}, marker=$markerSize", right >= left && last >= first)
             assertTrue("corner y=$first is under top bar bottom=$top", first >= top)
             assertTrue("corner y=$last is under dock top=$bottom", last < bottom)
             Offset((left + right) / 2f, (first + last) / 2f)
@@ -124,8 +129,9 @@ class DesktopViewportScreenTest {
             compose.runOnIdle {
                 assertEquals("corner $i did not reach remote input", 1, sink.clickPositions.size)
                 val (x, y) = sink.clickPositions.single()
-                assertTrue("corner $i mapped to $x,$y", x in (if (i % 2 == 0) 0..markerSize else (399 - markerSize)..399) &&
-                    y in (if (i < 2) 0..markerSize else (1599 - markerSize)..1599))
+                assertTrue("corner $i mapped to $x,$y", x in (if (i % 2 == 0) 0..markerSize
+                    else (fixtureWidth - 1 - markerSize) until fixtureWidth) &&
+                    y in (if (i < 2) 0..markerSize else (fixtureHeight - 1 - markerSize) until fixtureHeight))
             }
         }
     }
@@ -136,7 +142,9 @@ class DesktopViewportScreenTest {
     }
 
     @Test fun landscapeFitKeepsAllFourCornersReachable() {
-        screen(landscape = true)
+        // A desktop-shaped framebuffer leaves resolvable corner patches on a small landscape
+        // viewport. The other tests retain the tall framebuffer that exposes panel occlusion.
+        screen(landscape = true, frameWidth = 800, frameHeight = 450)
         assertCornersReachable()
     }
 
